@@ -23,8 +23,10 @@ class KaryawanController extends Controller
 
         if (session()->get('username') != 'ea') {
             $karyawan = Karyawan::where('id_divisi', $pengguna->id_divisi)->get();
+            $cek = TRUE;
         }elseif (session()->get('username') == 'ea') {
             $karyawan = Karyawan::with('bagian')->with('divisi')->get();
+            $cek = FALSE;
         }
 
 
@@ -33,7 +35,8 @@ class KaryawanController extends Controller
             'karyawan' => $karyawan,
             'bagian' => Bagian::orderBy('nama_bagian', 'ASC')->get(),
             'divisi' => Divisi::orderBy('nama_divisi', 'ASC')->get(),
-            'update' => Cuti::orderBy('updated_at', 'desc')->first()
+            'update' => Cuti::orderBy('updated_at', 'desc')->first(),
+            'cek'   => $cek
         ];
 
         return view('karyawan', $data);

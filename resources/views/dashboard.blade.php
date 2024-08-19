@@ -247,11 +247,11 @@
                             <thead>
                                 <tr>
                                     <th>Nama Karyawan</th>
-                                    <th class="d-none d-xl-table-cell">Bagian</th>
+                                    <th class="d-xl-table-cell">Bagian</th>
                                     <th class="text-center">Total Tidak Masuk</th>
-                                    <th class="d-none d-sm-table-cell text-center">Sakit</th>
-                                    <th class="d-none d-sm-table-cell text-center">Ijin</th>
-                                    <th class="d-none d-sm-table-cell text-center">Alpa</th>
+                                    <th class="d-sm-table-cell text-center">Sakit</th>
+                                    <th class="d-sm-table-cell text-center">Ijin</th>
+                                    <th class="d-sm-table-cell text-center">Alpa</th>
                                 </tr>
                             </thead>
                             <tbody class="fs-sm">
@@ -260,18 +260,18 @@
                                         <td>
                                             <a href="{{ route('karyawan.detail', ['id' => $krywn->id_karyawan]) }}" class="fw-semibold">{{ $krywn->nama_karyawan }}</a>
                                         </td>
-                                        <td class="d-none d-xl-table-cell">
+                                        <td class="d-xl-table-cell">
                                             <a class="fw-semibold">{{ $krywn->nama_bagian }}</a>
                                         </td>
                                         <td class="text-center">
                                             <span
                                                 class="fw-bold d-inline-block py-1 px-3 rounded-pill bg-info-light text-info">{{ $krywn->jumlah_cuti_total }}</span>
                                         </td>
-                                        <td class="d-none d-sm-table-cell text-center">
+                                        <td class="d-sm-table-cell text-center">
                                             {{ $krywn->sakit }}
                                         </td>
-                                        <td class="d-none d-sm-table-cell text-center">{{ $krywn->ijin }}</td>
-                                        <td class="d-none d-sm-table-cell text-center">
+                                        <td class="d-sm-table-cell text-center">{{ $krywn->ijin }}</td>
+                                        <td class="d-sm-table-cell text-center">
                                             {{ $krywn->alpa }}
                                         </td>
                                     </tr>

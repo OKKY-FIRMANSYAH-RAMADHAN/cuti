@@ -34,8 +34,8 @@
         <!-- Page Content -->
         <div class="content">
             <!-- Dynamic Table Responsive -->
-            <div class="block block-rounded">
-                <div class="block-content block-content-full">
+            <div class="block block-rounded ">
+                <div class="block-content block-content-full ">
                     <!-- DataTables init on table by adding .js-dataTable-responsive class, functionality is initialized in js/pages/be_tables_datatables.min.js which was auto compiled from _js/pages/be_tables_datatables.js -->
                     <table class="table table-bordered table-striped table-vcenter js-dataTable-buttons">
                         <thead>
@@ -43,7 +43,7 @@
                                 <th class="text-center fs-sm d-none d-md-table-cell" style="width: 10%;">No</th>
                                 <th>Nama Karyawan</th>
                                 <th class="d-none d-md-table-cell">Bagian</th>
-                                <th class="d-none d-md-table-cell">Divisi</th>
+                                <th class="{{ $cek ? 'd-none d-md-table-cell' : ''}}">Divisi</th>
                                 <th class="text-center fs-sm">Sisa Cuti</th>
                                 <th class="no-print text-center">Aksi</th>
                             </tr>
@@ -54,7 +54,7 @@
                                     <td class="text-center fs-sm d-none d-md-table-cell">{{ $loop->iteration }}</td>
                                     <td>{{ $krywn->nama_karyawan }}</td>
                                     <td class="d-none d-md-table-cell">{{ $krywn->bagian->nama_bagian ?? '-' }}</td>
-                                    <td class="d-none d-md-table-cell">{{ $krywn->divisi->nama_divisi ?? '-' }}</td>
+                                    <td class="{{ $cek ? 'd-none d-md-table-cell' : ''}}">{{ $krywn->divisi->nama_divisi ?? '-' }}</td>
                                     <td class="text-center"><strong>{{ $krywn->sisa_cuti }}</strong></td>
                                     <td class="fw-semibold fs-sm text-center">
                                         @if (session()->get('username') == 'ea')
