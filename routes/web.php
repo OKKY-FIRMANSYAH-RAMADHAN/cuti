@@ -3,15 +3,15 @@
 use Illuminate\Support\Facades\Route;
 
 
-Route::get('/login', [\App\Http\Controllers\PenggunaController::class, 'login'])->name('login')->middleware(\App\Http\Middleware\isLogin::class);
-Route::post('/login', [\App\Http\Controllers\PenggunaController::class, 'authlogin'])->name('auth.login')->middleware(\App\Http\Middleware\isLogin::class);
+Route::get('/login', [\App\Http\Controllers\PenggunaController::class, 'login'])->name('login')->middleware(\App\Http\Middleware\islogin::class);
+Route::post('/login', [\App\Http\Controllers\PenggunaController::class, 'authlogin'])->name('auth.login')->middleware(\App\Http\Middleware\islogin::class);
 Route::get('/logout', [\App\Http\Controllers\PenggunaController::class, 'logout'])->name('logout');
 
 
-Route::middleware([\App\Http\Middleware\CekLogin::class])->group(function () {
+Route::middleware([\App\Http\Middleware\ceklogin::class])->group(function () {
 
     // Bagian
-    Route::middleware([\App\Http\Middleware\isNotAdmin::class])->group(function () {
+    Route::middleware([\App\Http\Middleware\isnotadmin::class])->group(function () {
         Route::get('/', [\App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
 
         Route::get('/bagian', [\App\Http\Controllers\BagianController::class, 'index'])->name('bagian');
