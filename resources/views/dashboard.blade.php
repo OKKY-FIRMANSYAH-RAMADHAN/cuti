@@ -167,7 +167,15 @@
                                 <div class="col-6 col-sm-2">
                                     <dl class="mb-0">
                                         <dt class="fs-3 fw-bold d-inline-flex align-items-center space-x-2">
-                                            <span>{{ $percentA + $percentSD + $percentS + $percentI }}%</span>
+                                            <span>{{ $percentDIS }}%</span>
+                                        </dt>
+                                        <dd class="fs-sm fw-medium text-muted mb-0">DIS</dd>
+                                    </dl>
+                                </div>
+                                <div class="col-6 col-sm-2">
+                                    <dl class="mb-0">
+                                        <dt class="fs-3 fw-bold d-inline-flex align-items-center space-x-2">
+                                            <span>{{ $percentA + $percentSD + $percentS + $percentI + $percentDIS }}%</span>
                                         </dt>
                                         <dd class="fs-sm fw-medium text-muted mb-0">Total</dd>
                                     </dl>
@@ -298,7 +306,7 @@
             let t, a, e, r, o, n, i, s, l = document.getElementById("js-chartjs-lines"),
                 d = document.getElementById("js-chartjs-bars");
 
-            let labels = <?php echo json_encode($tanggalBulanIni); ?>;
+            let labels = {{ json_encode($tanggalBulanIni); }};
             let formattedLabels = labels.map(label => `${label}`);
 
             i = {
@@ -323,7 +331,12 @@
                     fill: true,
                     backgroundColor: "red",
                     data: {{ json_encode($dataBarA) }}
-                } ]
+                },{
+                    label: "DIS",
+                    fill: true,
+                    backgroundColor: "green",
+                    data: {{ json_encode($dataBarDIS) }}
+                }]
             };
 
             if (d) {

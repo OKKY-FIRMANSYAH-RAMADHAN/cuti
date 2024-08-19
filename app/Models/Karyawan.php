@@ -32,6 +32,7 @@ class Karyawan extends Model
             ->selectRaw('COUNT(CASE WHEN cuti.keterangan IN ("S", "SD") THEN 1 END) AS sakit')
             ->selectRaw('COUNT(CASE WHEN cuti.keterangan = "I" THEN 1 END) AS ijin')
             ->selectRaw('COUNT(CASE WHEN cuti.keterangan = "A" THEN 1 END) AS alpa')
+            ->selectRaw('COUNT(CASE WHEN cuti.keterangan = "DIS" THEN 1 END) AS dispen')
             ->join('cuti', 'karyawan.id_karyawan', '=', 'cuti.id_karyawan')
             ->leftJoin('bagian', 'karyawan.id_bagian', '=', 'bagian.id_bagian')
             ->groupBy('karyawan.id_karyawan', 'karyawan.nama_karyawan', 'bagian.nama_bagian')

@@ -28,7 +28,8 @@ class Cuti extends Model
                 DB::raw('SUM(CASE WHEN keterangan = "SD" THEN 1 ELSE 0 END) as total_SD'),
                 DB::raw('SUM(CASE WHEN keterangan = "A" THEN 1 ELSE 0 END) as total_A'),
                 DB::raw('SUM(CASE WHEN keterangan = "I" THEN 1 ELSE 0 END) as total_I'),
-                DB::raw('SUM(CASE WHEN keterangan = "S" THEN 1 ELSE 0 END) as total_S')
+                DB::raw('SUM(CASE WHEN keterangan = "S" THEN 1 ELSE 0 END) as total_S'),
+                DB::raw('SUM(CASE WHEN keterangan = "DIS" THEN 1 ELSE 0 END) as total_DIS')
             )
             ->groupBy(DB::raw('YEAR(tanggal)'))
             ->orderBy(DB::raw('YEAR(tanggal)'), 'asc')
@@ -47,7 +48,8 @@ class Cuti extends Model
                 DB::raw('SUM(CASE WHEN keterangan = "SD" THEN 1 ELSE 0 END) as total_SD'),
                 DB::raw('SUM(CASE WHEN keterangan = "A" THEN 1 ELSE 0 END) as total_A'),
                 DB::raw('SUM(CASE WHEN keterangan = "I" THEN 1 ELSE 0 END) as total_I'),
-                DB::raw('SUM(CASE WHEN keterangan = "S" THEN 1 ELSE 0 END) as total_S')
+                DB::raw('SUM(CASE WHEN keterangan = "S" THEN 1 ELSE 0 END) as total_S'),
+                DB::raw('SUM(CASE WHEN keterangan = "DIS" THEN 1 ELSE 0 END) as total_DIS')
             )
             ->whereBetween('tanggal', [$startDate, $endDate])
             ->groupBy(DB::raw('DATE(tanggal)'))
@@ -64,7 +66,8 @@ class Cuti extends Model
                 'total_SD' => $cutiRecord->total_SD ?? 0,
                 'total_A' => $cutiRecord->total_A ?? 0,
                 'total_I' => $cutiRecord->total_I ?? 0,
-                'total_S' => $cutiRecord->total_S ?? 0
+                'total_S' => $cutiRecord->total_S ?? 0,
+                'total_DIS' => $cutiRecord->total_DIS ?? 0
             ];
         }
 
@@ -83,7 +86,8 @@ class Cuti extends Model
                 'total_SD' => 0,
                 'total_A' => 0,
                 'total_I' => 0,
-                'total_S' => 0
+                'total_S' => 0,
+                'total_DIS' => 0
             ];
             $currentDate->addMonth();
         }
@@ -95,7 +99,8 @@ class Cuti extends Model
                 DB::raw('SUM(CASE WHEN keterangan = "SD" THEN 1 ELSE 0 END) as total_SD'),
                 DB::raw('SUM(CASE WHEN keterangan = "A" THEN 1 ELSE 0 END) as total_A'),
                 DB::raw('SUM(CASE WHEN keterangan = "I" THEN 1 ELSE 0 END) as total_I'),
-                DB::raw('SUM(CASE WHEN keterangan = "S" THEN 1 ELSE 0 END) as total_S')
+                DB::raw('SUM(CASE WHEN keterangan = "S" THEN 1 ELSE 0 END) as total_S'),
+                DB::raw('SUM(CASE WHEN keterangan = "DIS" THEN 1 ELSE 0 END) as total_DIS')
             )
             ->whereBetween('tanggal', [$startDate, $endDate])
             ->groupBy(DB::raw('YEAR(tanggal)'), DB::raw('MONTH(tanggal)'))
@@ -111,6 +116,7 @@ class Cuti extends Model
                 $months[$bulanKey]->total_A = $data->total_A;
                 $months[$bulanKey]->total_I = $data->total_I;
                 $months[$bulanKey]->total_S = $data->total_S;
+                $months[$bulanKey]->total_DIS = $data->total_DIS;
             }
         }
 
