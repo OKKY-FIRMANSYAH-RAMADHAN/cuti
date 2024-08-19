@@ -7,15 +7,15 @@
 
     <title>UP - Login Page</title>
 
-    <meta name="description" content="OneUI - Bootstrap 5 Admin Template &amp; UI Framework created by pixelcave">
+    <meta name="description" content="Umum & Personalia">
     <meta name="author" content="pixelcave">
     <meta name="robots" content="index, follow">
 
     <!-- Open Graph Meta -->
-    <meta property="og:title" content="OneUI - Bootstrap 5 Admin Template &amp; UI Framework">
+    <meta property="og:title" content="Umum & Personalia">
     <meta property="og:site_name" content="OneUI">
     <meta property="og:description"
-        content="OneUI - Bootstrap 5 Admin Template &amp; UI Framework created by pixelcave">
+        content="Umum & Personalia">
     <meta property="og:type" content="website">
     <meta property="og:url" content="">
     <meta property="og:image" content="">
