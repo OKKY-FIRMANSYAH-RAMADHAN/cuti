@@ -37,6 +37,9 @@ Route::middleware([\App\Http\Middleware\ceklogin::class])->group(function () {
         Route::post('/karyawan/cuti', [\App\Http\Controllers\KaryawanController::class, 'cuti'])->name('karyawan.cuti');
         Route::post('/karyawan/update', [\App\Http\Controllers\KaryawanController::class, 'update'])->name('karyawan.update');
         Route::get('/karyawan/delete/{id}', [\App\Http\Controllers\KaryawanController::class, 'destroy'])->name('karyawan.delete');
+
+        Route::get('/cuti/delete/{id}', [\App\Http\Controllers\CutiController::class, 'destroy'])->name('cuti.delete');
+        Route::post('/cuti/update', [\App\Http\Controllers\CutiController::class, 'update'])->name('cuti.update');
     });
 
     // Karyawan
