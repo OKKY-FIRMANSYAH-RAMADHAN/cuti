@@ -19,13 +19,14 @@
                     </h1>
                 </div>
                 @if (session()->get('username') == 'ea')
-                <div class="mt-3 mt-md-0 ms-md-3 space-x-1">
-                    <button type="button" class="btn btn-sm btn-secondary push" data-bs-toggle="modal"
-                        data-bs-target="#modal-block-popin"> <i class="fa fa-plus opacity-50"></i> Tambah Karyawan</button>
-                    <button type="button" class="btn btn-sm btn-success push" data-bs-toggle="modal"
-                        data-bs-target="#modal-block-import"> <i class="fa fa-upload opacity-50"></i> Import
-                        Karyawan</button>
-                </div>
+                    <div class="mt-3 mt-md-0 ms-md-3 space-x-1">
+                        <button type="button" class="btn btn-sm btn-secondary push" data-bs-toggle="modal"
+                            data-bs-target="#modal-block-popin"> <i class="fa fa-plus opacity-50"></i> Tambah
+                            Karyawan</button>
+                        <button type="button" class="btn btn-sm btn-success push" data-bs-toggle="modal"
+                            data-bs-target="#modal-block-import"> <i class="fa fa-upload opacity-50"></i> Import
+                            Karyawan</button>
+                    </div>
                 @endif
             </div>
         </div>
@@ -33,56 +34,59 @@
 
         <!-- Page Content -->
         <div class="content">
-            <!-- Dynamic Table Responsive -->
-            <div class="block block-rounded ">
-                <div class="block-content block-content-full ">
-                    <!-- DataTables init on table by adding .js-dataTable-responsive class, functionality is initialized in js/pages/be_tables_datatables.min.js which was auto compiled from _js/pages/be_tables_datatables.js -->
-                    <table class="table table-bordered table-striped table-vcenter js-dataTable-buttons">
-                        <thead>
-                            <tr>
-                                <th class="text-center fs-sm d-none d-md-table-cell" style="width: 10%;">No</th>
-                                <th>Nama Karyawan</th>
-                                <th class="d-none d-md-table-cell">Bagian</th>
-                                <th class="{{ $cek ? 'd-none d-md-table-cell' : ''}}">Divisi</th>
-                                <th class="text-center fs-sm">Sisa Cuti</th>
-                                <th class="no-print text-center">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($karyawan as $krywn)
+            <!-- Recent Orders -->
+            <div class="block block-rounded">
+                <div class="block-content block-content-full">
+                    <!-- Recent Orders Table -->
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped table-vcenter js-dataTable-buttons">
+                            <thead>
                                 <tr>
-                                    <td class="text-center fs-sm d-none d-md-table-cell">{{ $loop->iteration }}</td>
-                                    <td>{{ $krywn->nama_karyawan }}</td>
-                                    <td class="d-none d-md-table-cell">{{ $krywn->bagian->nama_bagian ?? '-' }}</td>
-                                    <td class="{{ $cek ? 'd-none d-md-table-cell' : ''}}">{{ $krywn->divisi->nama_divisi ?? '-' }}</td>
-                                    <td class="text-center"><strong>{{ $krywn->sisa_cuti }}</strong></td>
-                                    <td class="fw-semibold fs-sm text-center">
-                                        @if (session()->get('username') == 'ea')
-                                            <button type="button" class="btn btn-sm btn-success cutiButton"
-                                                data-id="{{ $krywn->id_karyawan }}"
-                                                data-name="{{ $krywn->nama_karyawan }}"><i
-                                                    class="fa fa-fw fa-calendar-plus"></i></button>
-                                            <button type="button" class="btn btn-sm btn-warning editButton"
-                                                data-id="{{ $krywn->id_karyawan }}"
-                                                data-name="{{ $krywn->nama_karyawan }}"
-                                                data-idbagian="{{ $krywn->id_bagian }}"
-                                                data-iddivisi="{{ $krywn->id_divisi }}"><i
-                                                    class="fa fa-fw fa-pencil-alt"></i></button>
-                                            <a href="{{ route('karyawan.delete', ['id' => $krywn->id_karyawan]) }}"
-                                                class="btn btn-sm btn-danger"
-                                                onclick="return confirm('Apakah Anda yakin ingin menghapus karyawan ini? Menghapus karyawan berpengaruh terhadap data yang berelasi')"><i
-                                                    class="fa fa-fw fa-trash"></i></a>
-                                        @endif
-                                        <a href="{{ route('karyawan.detail', ['id' => $krywn->id_karyawan]) }}"
-                                            class="btn btn-sm btn-info"><i class="fa fa-fw fa-info-circle"></i></a>
-                                    </td>
+                                    <th class="text-center">No</th>
+                                    <th>Nama Karyawan</th>
+                                    <th>Bagian</th>
+                                    <th>Divisi</th>
+                                    <th class="text-center">Sisa Cuti</th>
+                                    <th class="text-center">Aksi</th>
                                 </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody class="fs-sm">
+                                @foreach ($karyawan as $krywn)
+                                    <tr>
+                                        <td class="text-center">{{ $loop->iteration }}</td>
+                                        <td>{{ $krywn->nama_karyawan }}</td>
+                                        <td>{{ $krywn->bagian->nama_bagian ?? '-' }}</td>
+                                        <td>{{ $krywn->divisi->nama_divisi ?? '-' }}</td>
+                                        <td class="text-center"><strong>{{ $krywn->sisa_cuti }}</strong></td>
+                                        <td class="text-center">
+                                            @if (session()->get('username') == 'ea')
+                                                <button type="button" class="btn btn-sm btn-success cutiButton"
+                                                    data-id="{{ $krywn->id_karyawan }}"
+                                                    data-name="{{ $krywn->nama_karyawan }}"><i
+                                                        class="fa fa-fw fa-calendar-plus"></i></button>
+                                                <button type="button" class="btn btn-sm btn-warning editButton"
+                                                    data-id="{{ $krywn->id_karyawan }}"
+                                                    data-name="{{ $krywn->nama_karyawan }}"
+                                                    data-idbagian="{{ $krywn->id_bagian }}"
+                                                    data-iddivisi="{{ $krywn->id_divisi }}"><i
+                                                        class="fa fa-fw fa-pencil-alt"></i></button>
+                                                <a href="{{ route('karyawan.delete', ['id' => $krywn->id_karyawan]) }}"
+                                                    class="btn btn-sm btn-danger"
+                                                    onclick="return confirm('Apakah Anda yakin ingin menghapus karyawan ini? Menghapus karyawan berpengaruh terhadap data yang berelasi')"><i
+                                                        class="fa fa-fw fa-trash"></i></a>
+                                            @endif
+                                            <a href="{{ route('karyawan.detail', ['id' => $krywn->id_karyawan]) }}"
+                                                class="btn btn-sm btn-info"><i class="fa fa-fw fa-info-circle"></i></a>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- END Recent Orders Table -->
                 </div>
             </div>
-            <!-- Dynamic Table Responsive -->
+            <!-- END Recent Orders -->
         </div>
         <!-- END Page Content -->
     </main>
@@ -117,7 +121,8 @@
                                             <select class="form-select" id="id_bagian" name="id_bagian" required>
                                                 <option selected value="" disabled>Pilih Bagian</option>
                                                 @foreach ($bagian as $bgn)
-                                                    <option value="{{ $bgn->id_bagian }}">{{ $bgn->nama_bagian }}</option>
+                                                    <option value="{{ $bgn->id_bagian }}">{{ $bgn->nama_bagian }}
+                                                    </option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -171,7 +176,8 @@
                                             <label class="form-label" for="example-file-input">Input File Excel</label>
                                             <input class="form-control" type="file" name="file" id="file"
                                                 placeholder="Excel" required>
-                                                <span class="text-danger">* Download Format Excel </span><a href="{{ asset('assets/template_karyawan.xlsx') }}">Disini</a>
+                                            <span class="text-danger">* Download Format Excel </span><a
+                                                href="{{ asset('assets/template_karyawan.xlsx') }}">Disini</a>
                                         </div>
                                     </div>
                                 </div>

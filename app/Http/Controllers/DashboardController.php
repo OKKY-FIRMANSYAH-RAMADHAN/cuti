@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Cuti;
 use App\Models\Karyawan;
+use App\Models\Divisi;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 
@@ -18,6 +19,7 @@ class DashboardController extends Controller
         $data = [
             'title' => 'Dashboard',
             'update' => Cuti::latest('updated_at')->first(),
+            'divisi' => Divisi::orderBy('nama_divisi', "ASC")->get(),
         ];
         $totalKaryawan = Karyawan::count();
 
@@ -25,6 +27,7 @@ class DashboardController extends Controller
         $bulan = $request->input('bulan');
         $bulanMulai = $request->input('bulanmulai');
         $bulanAkhir = $request->input('bulanakhir');
+        $divisi = $request->input('divisi');
 
         $bulanSekarang = Carbon::now()->month;
         $tahunSekarang = Carbon::now()->year;
@@ -47,6 +50,13 @@ class DashboardController extends Controller
 
             return number_format(($totalC / $divisor) * 100, 1);
         };
+
+        if ($divisi) {
+            $find_divisi = Divisi::find($divisi);
+            $data['selectDivisi'] = $find_divisi->nama_divisi;
+        }else{
+            $data['selectDivisi'] = "SEMUA DIVISI";
+        }
 
         if ($bulan && $tahun) {
             $startDate              = Carbon::create($tahun, $bulan, 1);
@@ -150,7 +160,6 @@ class DashboardController extends Controller
         }
 
         return view('dashboard', $data);
-
     }
 
     private function getWorkingDaysWithoutSundays(Carbon $startDate, Carbon $endDate)

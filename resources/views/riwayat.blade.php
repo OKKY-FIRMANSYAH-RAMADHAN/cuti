@@ -27,39 +27,43 @@
 
         <!-- Page Content -->
         <div class="content">
-            <!-- Dynamic Table Responsive -->
+            <!-- Recent Orders -->
             <div class="block block-rounded">
                 <div class="block-content block-content-full">
-                    <!-- DataTables init on table by adding .js-dataTable-responsive class, functionality is initialized in js/pages/be_tables_datatables.min.js which was auto compiled from _js/pages/be_tables_datatables.js -->
-                    <table class="table table-bordered table-striped table-vcenter js-dataTable-buttons">
-                        <thead>
-                            <tr>
-                                <th style="width: 10%;" class="text-center">No</th>
-                                <th>Nama Karyawan</th>
-                                <th>Bagian</th>
-                                <th>Divisi</th>
-                                <th>Tanggal</th>
-                                <th>Keterangan</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($riwayat as $rwyt)
+                    <!-- Recent Orders Table -->
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped table-vcenter js-dataTable-buttons">
+                            <thead>
                                 <tr>
-                                    <td class="text-center fs-sm">{{ $loop->iteration }}</td>
-                                    <td>{{ $rwyt->karyawan->nama_karyawan }}</td>
-                                    <td>{{ $rwyt->karyawan->bagian->nama_bagian }}</td>
-                                    <td>{{ $rwyt->karyawan->divisi->nama_divisi }}</td>
-                                    <td>{{ Carbon::parse($rwyt->tanggal)->locale('id')->translatedFormat('d F Y') }}</td>
-                                    <td class="fw-bold text-uppercase">
-                                        {{ $rwyt->keterangan === 'SD' ? 'Sakit (Surat Dokter)' : ($rwyt->keterangan === 'S' ? 'Sakit (Tanpa Surat Dokter)' : ($rwyt->keterangan === 'I' ? 'Izin' : ($rwyt->keterangan === 'A' ? 'Alpa' : ($rwyt->keterangan === 'C' ? 'Cuti' : ($rwyt->keterangan === 'DIS' ? '1/2 Hari' : ($rwyt->keterangan === 'DR' ? 'Di Rumahkan' : '-')))))) }}
-                                    </td>
+                                    <th class="text-center">No</th>
+                                    <th>Nama Karyawan</th>
+                                    <th>Bagian</th>
+                                    <th>Divisi</th>
+                                    <th>Tanggal</th>
+                                    <th class="text-center">Keterangan</th>
                                 </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody class="fs-sm">
+                                @foreach ($riwayat as $rwyt)
+                                    <tr>
+                                        <td class="text-center fs-sm">{{ $loop->iteration }}</td>
+                                        <td>{{ $rwyt->karyawan->nama_karyawan }}</td>
+                                        <td>{{ $rwyt->karyawan->bagian->nama_bagian }}</td>
+                                        <td>{{ $rwyt->karyawan->divisi->nama_divisi }}</td>
+                                        <td>{{ Carbon::parse($rwyt->tanggal)->locale('id')->translatedFormat('d F Y') }}
+                                        </td>
+                                        <td class="fw-bold text-uppercase text-center">
+                                            {{ $rwyt->keterangan === 'SD' ? 'Sakit (Surat Dokter)' : ($rwyt->keterangan === 'S' ? 'Sakit (Tanpa Surat Dokter)' : ($rwyt->keterangan === 'I' ? 'Izin' : ($rwyt->keterangan === 'A' ? 'Alpa' : ($rwyt->keterangan === 'C' ? 'Cuti' : ($rwyt->keterangan === 'DIS' ? '1/2 Hari' : ($rwyt->keterangan === 'DR' ? 'Di Rumahkan' : '-')))))) }}
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- END Recent Orders Table -->
                 </div>
             </div>
-            <!-- Dynamic Table Responsive -->
+            <!-- END Recent Orders -->
         </div>
         <!-- END Page Content -->
     </main>

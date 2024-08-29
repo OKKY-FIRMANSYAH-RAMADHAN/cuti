@@ -15,7 +15,7 @@ class DivisiController extends Controller
     {
         $data = [
             'title' => "List Data Divisi",
-            'divisi'  => Divisi::all(),
+            'divisi'  => Divisi::orderBy('nama_divisi', 'ASC')->get(),
             'update' => Cuti::orderBy('updated_at', 'desc')->first()
         ];
 

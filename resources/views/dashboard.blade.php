@@ -1,5 +1,12 @@
 @extends('layout.template')
 
+@section('css')
+    <link rel="stylesheet" href="{{ asset('assets/js/plugins/datatables-bs5/css/dataTables.bootstrap5.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/js/plugins/datatables-buttons-bs5/css/buttons.bootstrap5.min.css') }}">
+    <link rel="stylesheet"
+        href="{{ asset('assets/js/plugins/datatables-responsive-bs5/css/responsive.bootstrap5.min.css') }}">
+@endsection
+
 @section('content')
     @php
         use Carbon\Carbon;
@@ -14,7 +21,7 @@
                         {{ $title }}
                     </h1>
                     <h2 class="h6 fw-medium fw-medium text-muted mb-0">
-                        Welcome <a class="fw-semibold">{{session()->get('nama')}}</a>, everything looks great.
+                        Welcome <a class="fw-semibold">{{ session()->get('nama') }}</a>, everything looks great.
                     </h2>
                 </div>
                 <div class="mt-3 mt-md-0 ms-md-3 space-x-1">
@@ -28,19 +35,47 @@
                         </button>
                         <div class="dropdown-menu dropdown-menu-end fs-sm" aria-labelledby="dropdown-analytics-overview">
                             <a class="dropdown-item fw-medium d-flex align-items-center justify-content-between"
-                                href="?bulan={{ Carbon::now()->month }}&tahun={{ Carbon::now()->year }}"><span>Bulan Ini</span> {!! $selectValue == "Bulan Ini" ? "<i class='fa fa-check'></i>" : '' !!} </a>
-                            <a class="dropdown-item fw-medium d-flex align-items-center justify-content-between" href="?bulan={{ (Carbon::now()->month - 1) }}&tahun={{ Carbon::now()->year }}"><span>Bulan Kemarin</span> {!! $selectValue == "Bulan Kemarin" ? "<i class='fa fa-check'></i>" : '' !!}</a>
-                            <a class="dropdown-item fw-medium d-flex align-items-center justify-content-between" href="?bulanmulai={{ (Carbon::now()->month - 2) }}&bulanakhir={{ Carbon::now()->month }}"><span>3 Bulan Terakhir</span> {!! $selectValue == "3 Bulan Terakhir" ? "<i class='fa fa-check'></i>" : '' !!}</a>
-                            <a class="dropdown-item fw-medium d-flex align-items-center justify-content-between" href="?bulanmulai={{ (Carbon::now()->month - 5) }}&bulanakhir={{ Carbon::now()->month }}"><span>6 Bulan Terakhir</span> {!! $selectValue == "6 Bulan Terakhir" ? "<i class='fa fa-check'></i>" : '' !!}</a>
+                                href="?bulan={{ Carbon::now()->month }}&tahun={{ Carbon::now()->year }}"><span>Bulan
+                                    Ini</span> {!! $selectValue == 'Bulan Ini' ? "<i class='fa fa-check'></i>" : '' !!} </a>
+                            <a class="dropdown-item fw-medium d-flex align-items-center justify-content-between"
+                                href="?bulan={{ Carbon::now()->month - 1 }}&tahun={{ Carbon::now()->year }}"><span>Bulan
+                                    Kemarin</span> {!! $selectValue == 'Bulan Kemarin' ? "<i class='fa fa-check'></i>" : '' !!}</a>
+                            <a class="dropdown-item fw-medium d-flex align-items-center justify-content-between"
+                                href="?bulanmulai={{ Carbon::now()->month - 2 }}&bulanakhir={{ Carbon::now()->month }}"><span>3
+                                    Bulan Terakhir</span> {!! $selectValue == '3 Bulan Terakhir' ? "<i class='fa fa-check'></i>" : '' !!}</a>
+                            <a class="dropdown-item fw-medium d-flex align-items-center justify-content-between"
+                                href="?bulanmulai={{ Carbon::now()->month - 5 }}&bulanakhir={{ Carbon::now()->month }}"><span>6
+                                    Bulan Terakhir</span> {!! $selectValue == '6 Bulan Terakhir' ? "<i class='fa fa-check'></i>" : '' !!}</a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item fw-medium d-flex align-items-center justify-content-between" href="?tahun={{ Carbon::now()->year }}"><span>Tahun Ini</span> {!! $selectValue == "Tahun Ini" ? "<i class='fa fa-check'></i>" : '' !!}</a>
-                            <a class="dropdown-item fw-medium d-flex align-items-center justify-content-between" href="?tahun={{ Carbon::now()->year - 1 }}"><span>Tahun Kemarin</span> {!! $selectValue == "Tahun Kemarin" ? "<i class='fa fa-check'></i>" : '' !!}</a>
+                            <a class="dropdown-item fw-medium d-flex align-items-center justify-content-between"
+                                href="?tahun={{ Carbon::now()->year }}"><span>Tahun Ini</span> {!! $selectValue == 'Tahun Ini' ? "<i class='fa fa-check'></i>" : '' !!}</a>
+                            <a class="dropdown-item fw-medium d-flex align-items-center justify-content-between"
+                                href="?tahun={{ Carbon::now()->year - 1 }}"><span>Tahun Kemarin</span>
+                                {!! $selectValue == 'Tahun Kemarin' ? "<i class='fa fa-check'></i>" : '' !!}</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item fw-medium d-flex align-items-center justify-content-between"
                                 href="/">
                                 <span>Sepanjang Masa</span>
-                                {!! $selectValue == "Sepanjang Masa" ? "<i class='fa fa-check'></i>" : '' !!}
+                                {!! $selectValue == 'Sepanjang Masa' ? "<i class='fa fa-check'></i>" : '' !!}
                             </a>
+                        </div>
+                    </div>
+                    <div class="dropdown d-inline-block">
+                        <button type="button" class="btn btn-sm btn-alt-secondary space-x-1"
+                            id="dropdown-analytics-overview" data-bs-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false">
+                            <i class="fa fa-fw fa-list opacity-50"></i>
+                            <span>{{ $selectDivisi }}</span>
+                            <i class="fa fa-fw fa-angle-down"></i>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-end fs-sm" aria-labelledby="dropdown-kategori">
+                            <a class="dropdown-item fw-medium d-flex align-items-center justify-content-between"
+                                href="#" onclick="updateUrl('divisi', 'all')">SEMUA DIVISI</a>
+                            @foreach ($divisi as $dvs)
+                                <a class="dropdown-item fw-medium d-flex align-items-center justify-content-between"
+                                    href="#"
+                                    onclick="updateUrl('divisi', '{{ $dvs->id_divisi }}')">{{ $dvs->nama_divisi }}</a>
+                            @endforeach
                         </div>
                     </div>
                 </div>
@@ -243,7 +278,7 @@
                 <div class="block-content block-content-full">
                     <!-- Recent Orders Table -->
                     <div class="table-responsive">
-                        <table class="table table-hover table-vcenter">
+                        <table class="table table-bordered table-striped table-vcenter js-dataTable-buttons-custom">
                             <thead>
                                 <tr>
                                     <th>Nama Karyawan</th>
@@ -258,7 +293,8 @@
                                 @foreach ($karyawan as $krywn)
                                     <tr>
                                         <td>
-                                            <a href="{{ route('karyawan.detail', ['id' => $krywn->id_karyawan]) }}" class="fw-semibold">{{ $krywn->nama_karyawan }}</a>
+                                            <a href="{{ route('karyawan.detail', ['id' => $krywn->id_karyawan]) }}"
+                                                class="fw-semibold">{{ $krywn->nama_karyawan }}</a>
                                         </td>
                                         <td class="d-xl-table-cell">
                                             <a class="fw-semibold">{{ $krywn->nama_bagian }}</a>
@@ -289,7 +325,24 @@
     </main>
 @endsection
 @section('javascript')
-    <script src="{{ asset('assets/js/plugins/chart.js/chart.umd.js') }}"></script>
+    <script src="{{ asset('assets/js/lib/jquery.min.js') }}"></script>
+
+    <!-- Page JS Plugins -->
+    <script src="{{ asset('assets/js/plugins/datatables/dataTables.min.js') }}"></script>
+    <script src="{{ asset('assets/js/plugins/datatables-bs5/js/dataTables.bootstrap5.min.js') }}"></script>
+    <script src="{{ asset('assets/js/plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
+    <script src="{{ asset('assets/js/plugins/datatables-responsive-bs5/js/responsive.bootstrap5.min.js') }}"></script>
+    <script src="{{ asset('assets/js/plugins/datatables-buttons/dataTables.buttons.min.js') }}"></script>
+    <script src="{{ asset('assets/js/plugins/datatables-buttons-bs5/js/buttons.bootstrap5.min.js') }}"></script>
+    <script src="{{ asset('assets/js/plugins/datatables-buttons-jszip/jszip.min.js') }}"></script>
+    <script src="{{ asset('assets/js/plugins/datatables-buttons-pdfmake/pdfmake.min.js') }}"></script>
+    <script src="{{ asset('assets/js/plugins/datatables-buttons-pdfmake/vfs_fonts.js') }}"></script>
+    <script src="{{ asset('assets/js/plugins/datatables-buttons/buttons.print.min.js') }}"></script>
+    <script src="{{ asset('assets/js/plugins/datatables-buttons/buttons.html5.min.js') }}"></script>
+
+    <!-- Page JS Code -->
+    <script src="{{ asset('assets/js/pages/be_tables_datatables.min.js') }}"></script>
+    <script src="{{ asset('assets/js/plugins/chart.js/chart.umd.js') }}"></script>>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             Chart.defaults.color = "#818d96";
@@ -306,7 +359,7 @@
             let t, a, e, r, o, n, i, s, l = document.getElementById("js-chartjs-lines"),
                 d = document.getElementById("js-chartjs-bars");
 
-            let labels = {{ json_encode($tanggalBulanIni); }};
+            let labels = {!! json_encode($tanggalBulanIni) !!};
             let formattedLabels = labels.map(label => `${label}`);
 
             i = {
@@ -326,12 +379,12 @@
                     fill: true,
                     backgroundColor: "grey",
                     data: {{ json_encode($dataBarI) }}
-                },{
+                }, {
                     label: "Alpa",
                     fill: true,
                     backgroundColor: "red",
                     data: {{ json_encode($dataBarA) }}
-                },{
+                }, {
                     label: "DIS",
                     fill: true,
                     backgroundColor: "green",
@@ -363,4 +416,17 @@
         });
     </script>
 
+    <script>
+        function updateUrl(key, value) {
+            const url = new URL(window.location.href);
+
+            if (value === 'all') {
+                url.searchParams.delete(key);
+            } else {
+                url.searchParams.set(key, encodeURIComponent(value));
+            }
+
+            window.location.href = url.toString();
+        }
+    </script>
 @endsection

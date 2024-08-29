@@ -29,46 +29,50 @@
 
         <!-- Page Content -->
         <div class="content">
-            <!-- Dynamic Table Responsive -->
+            <!-- Recent Orders -->
             <div class="block block-rounded">
                 <div class="block-content block-content-full">
-                    <!-- DataTables init on table by adding .js-dataTable-responsive class, functionality is initialized in js/pages/be_tables_datatables.min.js which was auto compiled from _js/pages/be_tables_datatables.js -->
-                    <table class="table table-bordered table-striped table-vcenter js-dataTable-buttons">
-                        <thead>
-                            <tr>
-                                <th style="width: 10%;">No</th>
-                                <th>Nama Pengguna</th>
-                                <th>Username</th>
-                                <th>Hak Akses</th>
-                                <th class="no-print">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($pengguna as $pgn)
+                    <!-- Recent Orders Table -->
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped table-vcenter js-dataTable-buttons">
+                            <thead>
                                 <tr>
-                                    <td class="text-center fs-sm">{{ $loop->iteration }}</td>
-                                    <td>{{ $pgn->nama_lengkap }}</td>
-                                    <td>{{ $pgn->username }}</td>
-                                    <td>{{ $pgn->username == 'ea' ? 'SEMUA DIVISI' : $pgn->divisi->nama_divisi }}</td>
-                                    <td class="fw-semibold fs-sm">
-                                        @if ($pgn->username != 'ea')
-                                            <button type="button" class="btn btn-sm btn-warning editButton"
-                                                data-id="{{ $pgn->id_pengguna }}" data-name="{{ $pgn->nama_lengkap }}"
-                                                data-user="{{ $pgn->username }}" data-divisi="{{ $pgn->id_divisi }}"><i
-                                                    class="fa fa-fw fa-pencil-alt"></i></button>
-                                            <a href="{{ route('pengguna.delete', ['id' => $pgn->id_pengguna]) }}"
-                                                class="btn btn-sm btn-danger"
-                                                onclick="return confirm('Apakah Anda yakin ingin menghapus pengguna ini?')"><i
-                                                    class="fa fa-fw fa-trash"></i></a>
-                                        @endif
-                                    </td>
+                                    <th class="text-center">No</th>
+                                    <th>Nama Pengguna</th>
+                                    <th>Username</th>
+                                    <th>Hak Akses</th>
+                                    <th class="no-print text-center">Aksi</th>
                                 </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody class="fs-sm">
+                                @foreach ($pengguna as $pgn)
+                                    <tr>
+                                        <td class="text-center fs-sm">{{ $loop->iteration }}</td>
+                                        <td>{{ $pgn->nama_lengkap }}</td>
+                                        <td>{{ $pgn->username }}</td>
+                                        <td>{{ $pgn->username == 'ea' ? 'SEMUA DIVISI' : $pgn->divisi->nama_divisi }}</td>
+                                        <td class="fw-semibold fs-sm text-center">
+                                            @if ($pgn->username != 'ea')
+                                                <button type="button" class="btn btn-sm btn-warning editButton"
+                                                    data-id="{{ $pgn->id_pengguna }}" data-name="{{ $pgn->nama_lengkap }}"
+                                                    data-user="{{ $pgn->username }}"
+                                                    data-divisi="{{ $pgn->id_divisi }}"><i
+                                                        class="fa fa-fw fa-pencil-alt"></i></button>
+                                                <a href="{{ route('pengguna.delete', ['id' => $pgn->id_pengguna]) }}"
+                                                    class="btn btn-sm btn-danger"
+                                                    onclick="return confirm('Apakah Anda yakin ingin menghapus pengguna ini?')"><i
+                                                        class="fa fa-fw fa-trash"></i></a>
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- END Recent Orders Table -->
                 </div>
             </div>
-            <!-- Dynamic Table Responsive -->
+            <!-- END Recent Orders -->
         </div>
         <!-- END Page Content -->
     </main>

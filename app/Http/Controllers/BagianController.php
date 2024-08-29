@@ -13,13 +13,11 @@ class BagianController extends Controller
      */
     public function index()
     {
-        $data = [
-            'title' => "List Data Bagian",
-            'bagian'  => Bagian::all(),
-            'update' => Cuti::orderBy('updated_at', 'desc')->first()
-        ];
-
-        return view('bagian', $data);
+        return view('bagian', [
+            'title' => 'List Data Bagian',
+            'bagian' => Bagian::orderBy('nama_bagian', 'ASC')->get(),
+            'update' => Cuti::orderBy('updated_at', 'desc')->first(),
+        ]);
     }
 
     /**
@@ -35,20 +33,21 @@ class BagianController extends Controller
      */
     public function store(Request $request)
     {
-        $bagian = new Bagian();
-        $bagian->nama_bagian = $request->nama_bagian;
-        $save = $bagian->save();
+        $validate = $request->validate([
+            'nama_bagian' => 'required',
+        ]);
 
-        if ($save) {
-            session()->flash('success', 'Berhasil Menambah Data Bagian');
-            return redirect()->route('bagian');
+        $store = Bagian::create($validate);
+
+        if ($store) {
+            return redirect(url('bagian'))->with('success','Berhasil Menambah Data Bagian');
         }
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Bagian $bagian)
+    public function show(string $id)
     {
         //
     }
@@ -56,7 +55,7 @@ class BagianController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Bagian $bagian)
+    public function edit(string $id)
     {
         //
     }
@@ -66,25 +65,26 @@ class BagianController extends Controller
      */
     public function update(Request $request)
     {
+        $validate = $request->validate([
+            'nama_bagian' => 'required',
+        ]);
+
         $bagian = Bagian::find($request->id_bagian);
-        $bagian->nama_bagian = $request->nama_bagian;
-        $update = $bagian->save();
+        $update = $bagian->update($validate);
 
         if ($update) {
-            session()->flash('success', 'Berhasil Mengubah Data Bagian');
-            return redirect()->route('bagian');
+            return redirect(url('bagian'))->with('success','Berhasil Mengubah Data Bagian');
         }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    public function destroy(string $id)
     {
         $delete = Bagian::destroy($id);
         if ($delete) {
-            session()->flash('success', 'Berhasil Menghapus Data Bagian');
-            return redirect()->route('bagian');
+            return redirect(url('bagian'))->with('success','Berhasil Menghapus Data Bagian');
         }
     }
 }

@@ -38,7 +38,7 @@
                 <div class="block-header block-header-default">
                     <h3 class="block-title">Riwayat Tidak Masuk ({{ count($cuti) }})</h3>
                 </div>
-                <div class="block-content">
+                <div class="block-content block-content-full">
                     <div class="table-responsive">
                         <table class="table table-bordered table-striped table-vcenter js-dataTable-simple">
                             <thead>

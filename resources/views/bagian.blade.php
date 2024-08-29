@@ -107,7 +107,7 @@
             <div class="modal-content">
                 <div class="block block-rounded block-transparent mb-0">
                     <div class="block-header block-header-default">
-                        <h3 class="block-title">Edit Data Kategori</h3>
+                        <h3 class="block-title">Edit Data Bagian</h3>
                         <div class="block-options">
                             <button type="button" class="btn-block-option" data-bs-dismiss="modal" aria-label="Close">
                                 <i class="fa fa-fw fa-times"></i>

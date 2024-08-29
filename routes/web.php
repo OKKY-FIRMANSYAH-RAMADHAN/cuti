@@ -10,10 +10,11 @@ Route::get('/logout', [\App\Http\Controllers\PenggunaController::class, 'logout'
 
 Route::middleware([\App\Http\Middleware\ceklogin::class])->group(function () {
 
-    // Bagian
+
     Route::middleware([\App\Http\Middleware\isnotadmin::class])->group(function () {
         Route::get('/', [\App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
 
+        // Bagian
         Route::get('/bagian', [\App\Http\Controllers\BagianController::class, 'index'])->name('bagian');
         Route::post('/bagian', [\App\Http\Controllers\BagianController::class, 'store'])->name('bagian.insert');
         Route::post('/bagian/update', [\App\Http\Controllers\BagianController::class, 'update'])->name('bagian.update');
