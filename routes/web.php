@@ -26,21 +26,29 @@ Route::middleware([\App\Http\Middleware\ceklogin::class])->group(function () {
         Route::post('/divisi/update', [\App\Http\Controllers\DivisiController::class, 'update'])->name('divisi.update');
         Route::get('/divisi/delete/{id}', [\App\Http\Controllers\DivisiController::class, 'destroy'])->name('divisi.delete');
 
+        // Riwayat Cuti
         Route::get('/riwayat', [\App\Http\Controllers\CutiController::class, 'index'])->name('riwayat');
 
+        // Pengguna
         Route::get('/pengguna', [\App\Http\Controllers\PenggunaController::class, 'index'])->name('pengguna');
         Route::post('/pengguna', [\App\Http\Controllers\PenggunaController::class, 'store'])->name('pengguna.insert');
         Route::post('/pengguna/update', [\App\Http\Controllers\PenggunaController::class, 'update'])->name('pengguna.update');
         Route::get('/pengguna/delete/{id}', [\App\Http\Controllers\PenggunaController::class, 'destroy'])->name('pengguna.delete');
 
+        // Karyawan
         Route::post('/karyawan', [\App\Http\Controllers\KaryawanController::class, 'store'])->name('karyawan.insert');
         Route::post('/karyawan/import', [\App\Http\Controllers\KaryawanController::class, 'import'])->name('karyawan.import');
         Route::post('/karyawan/cuti', [\App\Http\Controllers\KaryawanController::class, 'cuti'])->name('karyawan.cuti');
         Route::post('/karyawan/update', [\App\Http\Controllers\KaryawanController::class, 'update'])->name('karyawan.update');
         Route::get('/karyawan/delete/{id}', [\App\Http\Controllers\KaryawanController::class, 'destroy'])->name('karyawan.delete');
 
+        // Cuti
         Route::get('/cuti/delete/{id}', [\App\Http\Controllers\CutiController::class, 'destroy'])->name('cuti.delete');
         Route::post('/cuti/update', [\App\Http\Controllers\CutiController::class, 'update'])->name('cuti.update');
+
+        // Pengaturan
+        Route::get('/pengaturan', [\App\Http\Controllers\PengaturanController::class, 'index'])->name('pengaturan');
+        Route::post('/pengaturan/cuti', [\App\Http\Controllers\PengaturanController::class, 'setCuti'])->name('pengaturan.cuti');
     });
 
     // Karyawan

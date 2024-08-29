@@ -72,6 +72,13 @@
                         </a>
                     </li>
                     <li class="nav-main-item">
+                        <a class="nav-main-link {{ Route::currentRouteName() === 'pengaturan' ? 'active' : '' }}"
+                            href="{{ route('pengaturan') }}">
+                            <i class="nav-main-link-icon si si-settings"></i>
+                            <span class="nav-main-link-name">Pengaturan</span>
+                        </a>
+                    </li>
+                    <li class="nav-main-item">
                         <a class="nav-main-link" href="{{route('logout')}}">
                             <i class="nav-main-link-icon si si-logout"></i>
                             <span class="nav-main-link-name">Logout</span>
