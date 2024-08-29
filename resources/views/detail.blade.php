@@ -47,7 +47,7 @@
                                     <th class="text-center">Tanggal</th>
                                     <th class="text-center">Keterangan</th>
                                     @if (session()->get('username') == 'ea')
-                                    <th class="text-center">Aksi</th>
+                                        <th class="text-center">Aksi</th>
                                     @endif
                                 </tr>
                             </thead>
@@ -57,22 +57,21 @@
                                         <td class="text-center"><strong>{{ $loop->iteration }}</strong></td>
                                         <td class="text-center">
                                             {{ Carbon::parse($ct->tanggal)->locale('id')->translatedFormat('d F Y') }}</td>
-                                        <td class="text-center"><span
-                                                class="badge" style="background-color: {{ $ct->keterangan === 'A' ? 'red' : ($ct->keterangan === 'SD' ? 'mediumblue' : ($ct->keterangan === 'C' ? 'black' : ($ct->keterangan === 'I' ? 'grey' : ($ct->keterangan === 'S' ? 'deepskyblue' : ($ct->keterangan === 'DIS' ? 'purple' : ($ct->keterangan === 'DR' ? 'green' : 'pink' ))))))}}">{{ $ct->keterangan === 'SD' ? 'Sakit (Surat Dokter)' : ($ct->keterangan === 'S' ? 'Sakit (Tanpa Surat Dokter)' : ($ct->keterangan === 'I' ? 'Izin' : ($ct->keterangan === 'A' ? 'Alpa' : ($ct->keterangan === 'C' ? 'Cuti' : ($ct->keterangan === 'DIS' ? '1/2 Hari' : ($ct->keterangan === 'DR' ? 'Di Rumahkan' : '-')))))) }}
+                                        <td class="text-center"><span class="badge"
+                                                style="background-color: {{ $ct->keterangan === 'A' ? 'red' : ($ct->keterangan === 'SD' ? 'mediumblue' : ($ct->keterangan === 'C' ? 'black' : ($ct->keterangan === 'I' ? 'grey' : ($ct->keterangan === 'S' ? 'deepskyblue' : ($ct->keterangan === 'DIS' ? 'purple' : ($ct->keterangan === 'DR' ? 'green' : 'pink')))))) }}">{{ $ct->keterangan === 'SD' ? 'Sakit (Surat Dokter)' : ($ct->keterangan === 'S' ? 'Sakit (Tanpa Surat Dokter)' : ($ct->keterangan === 'I' ? 'Izin' : ($ct->keterangan === 'A' ? 'Alpa' : ($ct->keterangan === 'C' ? 'Cuti' : ($ct->keterangan === 'DIS' ? '1/2 Hari' : ($ct->keterangan === 'DR' ? 'Di Rumahkan' : '-')))))) }}
                                         </td>
-                                        <td class="fw-semibold fs-sm text-center">
-                                            @if (session()->get('username') == 'ea')
+                                        @if (session()->get('username') == 'ea')
+                                            <td class="fw-semibold fs-sm text-center">
                                                 <button type="button" class="btn btn-sm btn-warning editButton"
-                                                    data-id="{{ $ct->id_cuti }}"
-                                                    data-tanggal="{{ $ct->tanggal }}"
+                                                    data-id="{{ $ct->id_cuti }}" data-tanggal="{{ $ct->tanggal }}"
                                                     data-keterangan="{{ $ct->keterangan }}"><i
                                                         class="fa fa-fw fa-pencil-alt"></i></button>
                                                 <a href="{{ route('cuti.delete', ['id' => $ct->id_cuti]) }}"
                                                     class="btn btn-sm btn-danger"
                                                     onclick="return confirm('Apakah Anda yakin ingin menghapus cuti ini?')"><i
                                                         class="fa fa-fw fa-trash"></i></a>
-                                            @endif
-                                        </td>
+                                            </td>
+                                        @endif
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -107,8 +106,8 @@
                                             <label class="form-label" for="example-file-input">Tanggal Cuti</label>
                                             <input class="form-control" type="date" name="tanggal" id="tanggal"
                                                 placeholder="Tanggal" required>
-                                                <input class="form-control" type="hidden" name="id_cuti"
-                                                id="id_cuti" required>
+                                            <input class="form-control" type="hidden" name="id_cuti" id="id_cuti"
+                                                required>
                                         </div>
                                         <div class="mb-4">
                                             <label class="form-label" for="example-file-input">Alasan Cuti</label>

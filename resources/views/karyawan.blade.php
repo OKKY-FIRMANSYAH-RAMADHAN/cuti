@@ -57,7 +57,14 @@
                                         <td>{{ $krywn->nama_karyawan }}</td>
                                         <td>{{ $krywn->bagian->nama_bagian ?? '-' }}</td>
                                         <td>{{ $krywn->divisi->nama_divisi ?? '-' }}</td>
-                                        <td class="text-center"><strong>{{ $krywn->sisa_cuti }}</strong></td>
+                                        <td class="text-center"><strong>{{ $krywn->sisa_cuti }}</strong>
+                                            @if (session()->get('username') == 'ea')
+                                                <button type="button" class="btn btn-sm buttonEditCuti"
+                                                    data-id="{{ $krywn->id_karyawan }}"
+                                                    data-cuti="{{ $krywn->sisa_cuti }}"><i
+                                                        class="fa fa-fw fa-pencil-alt"></i></button>
+                                            @endif
+                                        </td>
                                         <td class="text-center">
                                             @if (session()->get('username') == 'ea')
                                                 <button type="button" class="btn btn-sm btn-success cutiButton"
@@ -320,6 +327,49 @@
         </div>
     </div>
     {{-- End Modal Tambah Cuti --}}
+
+    {{-- Modal Edit Sisa Cuti --}}
+    <div class="modal" id="editCuti" tabindex="-1" role="dialog" aria-labelledby="modal-block-vcenter"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-popin modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="block block-rounded block-transparent mb-0">
+                    <div class="block-header block-header-default">
+                        <h3 class="block-title">Edit Sisa Cuti</h3>
+                        <div class="block-options">
+                            <button type="button" class="btn-block-option" data-bs-dismiss="modal" aria-label="Close">
+                                <i class="fa fa-fw fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <form action="{{ route('karyawan.setsisacuti') }}" method="post" enctype="multipart/form-data">
+                        @csrf
+                        <div class="block-content fs-sm">
+                            <div class="block-content block-content-full">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="mb-4">
+                                            <label class="form-label" for="example-file-input">Sisa Cuti</label>
+                                            <input class="form-control" type="text" name="sisa_cuti" id="sisa_cuti"
+                                                placeholder="Sisa Cuti" required>
+                                            <input class="form-control" type="hidden" name="id_karyawan"
+                                                id="id_karyawan" placeholder="Id Karyawan" required>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="block-content block-content-full text-end bg-body">
+                            <button type="button" class="btn btn-sm btn-alt-secondary me-1"
+                                data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-sm btn-primary">Update Sisa Cuti</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{-- End Modal Edit Sisa Cuti --}}
 @endsection
 
 @section('javascript')
@@ -395,6 +445,23 @@
                 idKaryawan.value = id;
                 var cutiModal = new bootstrap.Modal(modal);
                 cutiModal.show();
+            });
+        });
+    </script>
+
+    <script>
+        var editCutiButton = document.querySelectorAll(".buttonEditCuti");
+        editCutiButton.forEach(function(editCutiButton) {
+            editCutiButton.addEventListener("click", function() {
+                var id = editCutiButton.getAttribute("data-id");
+                var name = editCutiButton.getAttribute("data-cuti");
+                var modal = document.getElementById("editCuti");
+                var sisaCuti = modal.querySelector("#sisa_cuti");
+                var idKaryawan = modal.querySelector("#id_karyawan");
+                sisaCuti.value = name;
+                idKaryawan.value = id;
+                var editCuti = new bootstrap.Modal(modal);
+                editCuti.show();
             });
         });
     </script>

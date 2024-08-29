@@ -39,6 +39,7 @@ Route::middleware([\App\Http\Middleware\ceklogin::class])->group(function () {
         Route::post('/karyawan', [\App\Http\Controllers\KaryawanController::class, 'store'])->name('karyawan.insert');
         Route::post('/karyawan/import', [\App\Http\Controllers\KaryawanController::class, 'import'])->name('karyawan.import');
         Route::post('/karyawan/cuti', [\App\Http\Controllers\KaryawanController::class, 'cuti'])->name('karyawan.cuti');
+        Route::post('/karyawan/set-sisa-cuti', [\App\Http\Controllers\KaryawanController::class, 'setSisaCuti'])->name('karyawan.setsisacuti');
         Route::post('/karyawan/update', [\App\Http\Controllers\KaryawanController::class, 'update'])->name('karyawan.update');
         Route::get('/karyawan/delete/{id}', [\App\Http\Controllers\KaryawanController::class, 'destroy'])->name('karyawan.delete');
 

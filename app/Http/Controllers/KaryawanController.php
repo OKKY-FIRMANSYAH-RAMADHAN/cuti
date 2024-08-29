@@ -99,6 +99,17 @@ class KaryawanController extends Controller
         }
     }
 
+    public function setSisaCuti(Request $request) {
+        $karyawan = Karyawan::find($request->id_karyawan);
+        $karyawan->sisa_cuti = $request->sisa_cuti;
+        $update = $karyawan->save();
+
+        if ($update) {
+            session()->flash('success', 'Berhasil Mengubah Sisa Cuti Karyawan');
+            return redirect()->route('karyawan');
+        }
+    }
+
     /**
      * Show the form for editing the specified resource.
      */
