@@ -25,7 +25,7 @@ class Karyawan extends Model
         return $this->belongsTo(Divisi::class, 'id_divisi', 'id_divisi')->select('id_divisi', 'nama_divisi');
     }
 
-    public static function getCutiStatistics($limit = 10)
+    public static function getCutiStatistics($limit = 20, $id_divisi = null)
     {
         return self::select('karyawan.id_karyawan', 'karyawan.nama_karyawan', 'bagian.nama_bagian')
             ->selectRaw('COUNT(cuti.id_cuti) AS jumlah_cuti_total')
@@ -36,7 +36,10 @@ class Karyawan extends Model
             ->join('cuti', 'karyawan.id_karyawan', '=', 'cuti.id_karyawan')
             ->leftJoin('bagian', 'karyawan.id_bagian', '=', 'bagian.id_bagian')
             ->groupBy('karyawan.id_karyawan', 'karyawan.nama_karyawan', 'bagian.nama_bagian')
-            ->limit($limit)
-            ->orderBy('jumlah_cuti_total', 'DESC');
+            ->when($id_divisi != null, function ($query) use ($id_divisi) {
+                $query->where('karyawan.id_divisi', $id_divisi);
+            })
+            ->orderBy('jumlah_cuti_total', 'DESC')
+            ->limit($limit);
     }
 }

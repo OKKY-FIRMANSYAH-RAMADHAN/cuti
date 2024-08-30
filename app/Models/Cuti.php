@@ -21,8 +21,9 @@ class Cuti extends Model
         return $this->belongsTo(Karyawan::class, 'id_karyawan', 'id_karyawan');
     }
 
-    public static function getCountCutiAllTime(){
+    public static function getCountCutiAllTime($id_divisi = null){
         $cutiSummary = DB::table('cuti')
+            ->join('karyawan', 'cuti.id_karyawan', '=', 'karyawan.id_karyawan')
             ->select(
                 DB::raw('YEAR(tanggal) as tahun'),
                 DB::raw('SUM(CASE WHEN keterangan = "SD" THEN 1 ELSE 0 END) as total_SD'),
@@ -31,6 +32,9 @@ class Cuti extends Model
                 DB::raw('SUM(CASE WHEN keterangan = "S" THEN 1 ELSE 0 END) as total_S'),
                 DB::raw('SUM(CASE WHEN keterangan = "DIS" THEN 1 ELSE 0 END) as total_DIS')
             )
+            ->when($id_divisi, function ($query) use ($id_divisi) {
+                return $query->where('karyawan.id_divisi', $id_divisi);
+            })
             ->groupBy(DB::raw('YEAR(tanggal)'))
             ->orderBy(DB::raw('YEAR(tanggal)'), 'asc')
             ->get();
@@ -38,11 +42,12 @@ class Cuti extends Model
         return $cutiSummary;
     }
 
-    public static function getCountCutiByMonth($bulan, $tahun){
+    public static function getCountCutiByMonth($bulan, $tahun, $id_divisi = null){
         $startDate = Carbon::create($tahun, $bulan, 1)->startOfMonth();
         $endDate = $startDate->copy()->endOfMonth();
 
         $cutiData = DB::table('cuti')
+            ->join('karyawan', 'cuti.id_karyawan', '=', 'karyawan.id_karyawan')
             ->select(
                 DB::raw('DATE(tanggal) as tanggal'),
                 DB::raw('SUM(CASE WHEN keterangan = "SD" THEN 1 ELSE 0 END) as total_SD'),
@@ -51,12 +56,14 @@ class Cuti extends Model
                 DB::raw('SUM(CASE WHEN keterangan = "S" THEN 1 ELSE 0 END) as total_S'),
                 DB::raw('SUM(CASE WHEN keterangan = "DIS" THEN 1 ELSE 0 END) as total_DIS')
             )
+            ->when($id_divisi, function ($query) use ($id_divisi) {
+                return $query->where('karyawan.id_divisi', $id_divisi);
+            })
             ->whereBetween('tanggal', [$startDate, $endDate])
             ->groupBy(DB::raw('DATE(tanggal)'))
             ->orderBy(DB::raw('DATE(tanggal)'), 'asc')
             ->get();
 
-        // Membuat array untuk semua tanggal dari 1 hingga akhir bulan
         $dates = [];
         for ($date = $startDate; $date->lte($endDate); $date->addDay()) {
             $formattedDate = $date->format('Y-m-d');
@@ -74,8 +81,7 @@ class Cuti extends Model
         return collect($dates);
     }
 
-    public static function getCountCutiByRange($startDate, $endDate) {
-        // Menyiapkan array untuk menyimpan bulan dalam rentang tanggal
+    public static function getCountCutiByRange($startDate, $endDate, $id_divisi = null) {
         $months = [];
         $currentDate = Carbon::createFromFormat('Y-m-d', $startDate)->startOfMonth();
         $endDate = Carbon::createFromFormat('Y-m-d', $endDate)->endOfMonth();
@@ -93,6 +99,7 @@ class Cuti extends Model
         }
 
         $cutiData = DB::table('cuti')
+            ->join('karyawan', 'cuti.id_karyawan', '=', 'karyawan.id_karyawan')
             ->select(
                 DB::raw('YEAR(tanggal) as tahun'),
                 DB::raw('MONTH(tanggal) as bulan'),
@@ -102,13 +109,15 @@ class Cuti extends Model
                 DB::raw('SUM(CASE WHEN keterangan = "S" THEN 1 ELSE 0 END) as total_S'),
                 DB::raw('SUM(CASE WHEN keterangan = "DIS" THEN 1 ELSE 0 END) as total_DIS')
             )
+            ->when($id_divisi, function ($query) use ($id_divisi) {
+                return $query->where('karyawan.id_divisi', $id_divisi);
+            })
             ->whereBetween('tanggal', [$startDate, $endDate])
             ->groupBy(DB::raw('YEAR(tanggal)'), DB::raw('MONTH(tanggal)'))
             ->orderBy(DB::raw('YEAR(tanggal)'), 'asc')
             ->orderBy(DB::raw('MONTH(tanggal)'), 'asc')
             ->get();
 
-        // Mengisi data cuti ke array bulan
         foreach ($cutiData as $data) {
             $bulanKey = $data->tahun . '-' . str_pad($data->bulan, 2, '0', STR_PAD_LEFT);
             if (isset($months[$bulanKey])) {
@@ -122,8 +131,6 @@ class Cuti extends Model
 
         return collect($months);
     }
-
-
 
     public static function getAvailableYears()
     {

@@ -63,7 +63,7 @@ class DashboardController extends Controller
             $endDate                = $startDate->copy()->endOfMonth();
             $totalWorkingDays       = floor($this->getWorkingDaysWithoutSundays($startDate, $endDate));
 
-            $data['karyawan']       = Karyawan::getCutiStatistics(20)->whereYear('tanggal', $tahun)->whereMonth('tanggal', $bulan)->get();
+            $data['karyawan']       = Karyawan::getCutiStatistics(20, $divisi ?? NULL)->whereYear('tanggal', $tahun)->whereMonth('tanggal', $bulan)->get();
             $data['selectValue']    = ($bulan == $bulanSekarang && $tahun == $tahunSekarang) ? 'Bulan Ini' : ($bulan == ($bulanSekarang - 1) ? "Bulan Kemarin" : Carbon::createFromFormat('!m', $bulan)->locale('id')->translatedFormat('F'). ' ' .$tahun);
 
             $keteranganArray = ['C', 'SD', 'DR', 'DIS', 'A', 'I', 'S'];
@@ -75,7 +75,7 @@ class DashboardController extends Controller
             // Title Diagram Horizontal
             $data['tanggalBulanIni'] = range(1, $endDate->day);
             foreach ($keteranganArray as $keterangan) {
-                $data['dataBar' . $keterangan] = Cuti::getCountCutiByMonth($bulan, $tahun)
+                $data['dataBar' . $keterangan] = Cuti::getCountCutiByMonth($bulan, $tahun, $divisi ?? NULL)
                     ->pluck('total_' . $keterangan)
                     ->map(fn($value) => (int) $value)
                     ->toArray();
@@ -86,7 +86,7 @@ class DashboardController extends Controller
             $endDate = Carbon::create($tahun, 12, 1)->endOfMonth()->toDateString();
 
             $totalWorkingDays = floor($this->getWorkingDaysWithoutSundays(Carbon::create($tahun, 1, 1), Carbon::create($tahun, 12, 1)->endOfMonth()));
-            $data['karyawan'] = Karyawan::getCutiStatistics(20)->whereYear('tanggal', $tahun)->get();
+            $data['karyawan'] = Karyawan::getCutiStatistics(20, $divisi ?? NULL)->whereYear('tanggal', $tahun)->get();
             $data['selectValue'] = $tahunSekarang == $tahun ? 'Tahun Ini' : ($tahun == ($tahunSekarang - 1) ? 'Tahun Kemarin' : $tahun);
 
             $keteranganArray = ['C', 'SD', 'DR', 'DIS', 'A', 'I', 'S'];
@@ -103,7 +103,7 @@ class DashboardController extends Controller
 
             $data['tanggalBulanIni'] = array_values(array_slice($bulanIndo, 1 - 1, 12 - 1 + 1));
             foreach ($keteranganArray as $keterangan) {
-                $data['dataBar' . $keterangan] = Cuti::getCountCutiByRange($startDate, $endDate)
+                $data['dataBar' . $keterangan] = Cuti::getCountCutiByRange($startDate, $endDate, $divisi ?? NULL)
                     ->pluck('total_' . $keterangan)
                     ->map(fn($value) => (int) $value)
                     ->toArray();
@@ -114,7 +114,7 @@ class DashboardController extends Controller
             $endDate = Carbon::create($tahunSekarang, $bulanAkhir, 1)->endOfMonth()->toDateString();
             $totalWorkingDays = floor($this->getWorkingDaysWithoutSundays(Carbon::create($tahunSekarang, $bulanMulai, 1), Carbon::create($tahunSekarang, $bulanAkhir, 1)->endOfMonth()));
 
-            $data['karyawan'] = Karyawan::getCutiStatistics(20)->whereBetween('tanggal', [$startDate, $endDate])->get();
+            $data['karyawan'] = Karyawan::getCutiStatistics(20, $divisi ?? NULL)->whereBetween('tanggal', [$startDate, $endDate])->get();
             $data['selectValue'] = ($bulanAkhir - $bulanMulai + 1) . " Bulan Terakhir";
 
             $keteranganArray = ['C', 'SD', 'DR', 'DIS', 'A', 'I', 'S'];
@@ -127,7 +127,7 @@ class DashboardController extends Controller
             $bulanIndo = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 => 'Mei', 6 => 'Juni', 7 => 'Juli', 8 => 'Agustus', 9 => 'September', 10 => 'Oktober', 11 => 'November', 12 => 'Desember'];
             $data['tanggalBulanIni'] = array_values(array_slice($bulanIndo, $bulanMulai - 1, $bulanAkhir - $bulanMulai + 1));
             foreach ($keteranganArray as $keterangan) {
-                $data['dataBar' . $keterangan] = Cuti::getCountCutiByRange($startDate, $endDate)
+                $data['dataBar' . $keterangan] = Cuti::getCountCutiByRange($startDate, $endDate, $divisi ?? NULL)
                     ->pluck('total_' . $keterangan)
                     ->map(fn($value) => (int) $value)
                     ->toArray();
@@ -138,7 +138,7 @@ class DashboardController extends Controller
             $endDate = Carbon::create($tahunSekarang, 12, 1)->endOfMonth();
             $totalWorkingDays = floor($this->getWorkingDaysWithoutSundays($startDate, $endDate));
 
-            $data['karyawan'] = Karyawan::getCutiStatistics(20)->get();
+            $data['karyawan'] = Karyawan::getCutiStatistics(20, $divisi ?? NULL)->get();
             $data['selectValue'] = "Sepanjang Masa";
 
             // Value Card
@@ -151,7 +151,7 @@ class DashboardController extends Controller
             // Title Diagram Horizontal
             $data['tanggalBulanIni'] = Cuti::getAvailableYears();
             foreach ($keteranganArray as $keterangan) {
-                $data['dataBar' . $keterangan] = Cuti::getCountCutiAllTime()
+                $data['dataBar' . $keterangan] = Cuti::getCountCutiAllTime($divisi ?? NULL)
                     ->sortBy('tahun')
                     ->pluck('total_' . $keterangan)
                     ->map(fn($value) => (int) $value)
