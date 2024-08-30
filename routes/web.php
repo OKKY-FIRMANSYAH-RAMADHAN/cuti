@@ -39,6 +39,7 @@ Route::middleware([\App\Http\Middleware\ceklogin::class])->group(function () {
         Route::post('/karyawan', [\App\Http\Controllers\KaryawanController::class, 'store'])->name('karyawan.insert');
         Route::post('/karyawan/import', [\App\Http\Controllers\KaryawanController::class, 'import'])->name('karyawan.import');
         Route::post('/karyawan/cuti', [\App\Http\Controllers\KaryawanController::class, 'cuti'])->name('karyawan.cuti');
+        Route::post('/karyawan/sp', [\App\Http\Controllers\KaryawanController::class, 'sp'])->name('karyawan.sp');
         Route::post('/karyawan/set-sisa-cuti', [\App\Http\Controllers\KaryawanController::class, 'setSisaCuti'])->name('karyawan.setsisacuti');
         Route::post('/karyawan/update', [\App\Http\Controllers\KaryawanController::class, 'update'])->name('karyawan.update');
         Route::get('/karyawan/delete/{id}', [\App\Http\Controllers\KaryawanController::class, 'destroy'])->name('karyawan.delete');
@@ -46,6 +47,10 @@ Route::middleware([\App\Http\Middleware\ceklogin::class])->group(function () {
         // Cuti
         Route::get('/cuti/delete/{id}', [\App\Http\Controllers\CutiController::class, 'destroy'])->name('cuti.delete');
         Route::post('/cuti/update', [\App\Http\Controllers\CutiController::class, 'update'])->name('cuti.update');
+
+        // SP
+        Route::get('/sp/delete/{id}', [\App\Http\Controllers\SPController::class, 'destroy'])->name('sp.delete');
+        Route::post('/sp/update', [\App\Http\Controllers\SPController::class, 'update'])->name('sp.update');
 
         // Pengaturan
         Route::get('/pengaturan', [\App\Http\Controllers\PengaturanController::class, 'index'])->name('pengaturan');

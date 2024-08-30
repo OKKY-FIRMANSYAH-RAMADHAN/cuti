@@ -35,51 +35,132 @@
 
             <!-- Past Orders -->
             <div class="block block-rounded">
-                <div class="block-header block-header-default">
-                    <h3 class="block-title">Riwayat Tidak Masuk ({{ count($cuti) }})</h3>
-                </div>
-                <div class="block-content block-content-full">
-                    <div class="table-responsive">
-                        <table class="table table-bordered table-striped table-vcenter js-dataTable-simple">
-                            <thead>
-                                <tr>
-                                    <th class="text-center">No</th>
-                                    <th class="text-center">Tanggal</th>
-                                    <th class="text-center">Keterangan</th>
-                                    @if (session()->get('username') == 'ea')
-                                        <th class="text-center">Aksi</th>
-                                    @endif
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($cuti as $ct)
-                                    <tr>
-                                        <td class="text-center"><strong>{{ $loop->iteration }}</strong></td>
-                                        <td class="text-center">
-                                            {{ Carbon::parse($ct->tanggal)->locale('id')->translatedFormat('d F Y') }}</td>
-                                        <td class="text-center"><span class="badge"
-                                                style="background-color: {{ $ct->keterangan === 'A' ? 'red' : ($ct->keterangan === 'SD' ? 'mediumblue' : ($ct->keterangan === 'C' ? 'black' : ($ct->keterangan === 'I' ? 'grey' : ($ct->keterangan === 'S' ? 'deepskyblue' : ($ct->keterangan === 'DIS' ? 'purple' : ($ct->keterangan === 'DR' ? 'green' : 'pink')))))) }}">{{ $ct->keterangan === 'SD' ? 'Sakit (Surat Dokter)' : ($ct->keterangan === 'S' ? 'Sakit (Tanpa Surat Dokter)' : ($ct->keterangan === 'I' ? 'Izin' : ($ct->keterangan === 'A' ? 'Alpa' : ($ct->keterangan === 'C' ? 'Cuti' : ($ct->keterangan === 'DIS' ? '1/2 Hari' : ($ct->keterangan === 'DR' ? 'Di Rumahkan' : '-')))))) }}
-                                        </td>
-                                        @if (session()->get('username') == 'ea')
-                                            <td class="fw-semibold fs-sm text-center">
-                                                <button type="button" class="btn btn-sm btn-warning editButton"
-                                                    data-id="{{ $ct->id_cuti }}" data-tanggal="{{ $ct->tanggal }}"
-                                                    data-keterangan="{{ $ct->keterangan }}"><i
-                                                        class="fa fa-fw fa-pencil-alt"></i></button>
-                                                <a href="{{ route('cuti.delete', ['id' => $ct->id_cuti]) }}"
-                                                    class="btn btn-sm btn-danger"
-                                                    onclick="return confirm('Apakah Anda yakin ingin menghapus cuti ini?')"><i
-                                                        class="fa fa-fw fa-trash"></i></a>
-                                            </td>
-                                        @endif
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                <ul class="nav nav-tabs nav-tabs-alt" role="tablist">
+                    <li class="nav-item">
+                        <button class="nav-link active" id="btabs-alt-static-home-tab" data-bs-toggle="tab"
+                            data-bs-target="#btabs-alt-static-home" role="tab" aria-controls="btabs-alt-static-home"
+                            aria-selected="true">Riwayat Tidak Masuk
+                            ({{ count($cuti) }}) </button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link" id="btabs-alt-static-profile-tab" data-bs-toggle="tab"
+                            data-bs-target="#btabs-alt-static-profile" role="tab"
+                            aria-controls="btabs-alt-static-profile" aria-selected="false">Riwayat SP
+                            ({{ count($sp) }})</button>
+                    </li>
+                </ul>
+                <div class="block-content tab-content">
+                    <div class="tab-pane active" id="btabs-alt-static-home" role="tabpanel"
+                        aria-labelledby="btabs-alt-static-home-tab" tabindex="0">
+                        <div class="block-content block-content-full">
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-striped table-vcenter js-dataTable-simple">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">No</th>
+                                            <th class="text-center">Tanggal</th>
+                                            <th class="text-center">Keterangan</th>
+                                            @if (session()->get('username') == 'ea')
+                                                <th class="text-center">Aksi</th>
+                                            @endif
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($cuti as $ct)
+                                            <tr>
+                                                <td class="text-center"><strong>{{ $loop->iteration }}</strong>
+                                                </td>
+                                                <td class="text-center">
+                                                    {{ Carbon::parse($ct->tanggal)->locale('id')->translatedFormat('d F Y') }}
+                                                </td>
+                                                <td class="text-center">
+                                                    <span class="badge"
+                                                        style="background-color: {{ $ct->keterangan === 'A' ? 'red' : ($ct->keterangan === 'SD' ? 'mediumblue' : ($ct->keterangan === 'C' ? 'black' : ($ct->keterangan === 'I' ? 'grey' : ($ct->keterangan === 'S' ? 'deepskyblue' : ($ct->keterangan === 'DIS' ? 'purple' : ($ct->keterangan === 'DR' ? 'green' : 'pink')))))) }}">{{ $ct->keterangan === 'SD' ? 'Sakit (Surat Dokter)' : ($ct->keterangan === 'S' ? 'Sakit (Tanpa Surat Dokter)' : ($ct->keterangan === 'I' ? 'Izin' : ($ct->keterangan === 'A' ? 'Alpa' : ($ct->keterangan === 'C' ? 'Cuti' : ($ct->keterangan === 'DIS' ? '1/2 Hari' : ($ct->keterangan === 'DR' ? 'Di Rumahkan' : '-')))))) }}
+                                                    </span>
+                                                </td>
+                                                @if (session()->get('username') == 'ea')
+                                                    <td class="fw-semibold fs-sm text-center">
+                                                        <button type="button" class="btn btn-sm btn-warning editButton"
+                                                            data-id="{{ $ct->id_cuti }}"
+                                                            data-tanggal="{{ $ct->tanggal }}"
+                                                            data-keterangan="{{ $ct->keterangan }}"><i
+                                                                class="fa fa-fw fa-pencil-alt"></i></button>
+                                                        <a href="{{ route('cuti.delete', ['id' => $ct->id_cuti]) }}"
+                                                            class="btn btn-sm btn-danger"
+                                                            onclick="return confirm('Apakah Anda yakin ingin menghapus cuti ini?')"><i
+                                                                class="fa fa-fw fa-trash"></i></a>
+                                                    </td>
+                                                @endif
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="btabs-alt-static-profile" role="tabpanel"
+                        aria-labelledby="btabs-alt-static-profile-tab" tabindex="0">
+                        <div class="block-content block-content-full">
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-striped table-vcenter js-dataTable-simple">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">No</th>
+                                            <th class="text-center">Tanggal</th>
+                                            <th class="text-center">Keterangan Status</th>
+                                            @if (session()->get('username') == 'ea')
+                                                <th class="text-center">Aksi</th>
+                                            @endif
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($sp as $sp)
+                                            <tr>
+                                                <td class="text-center"><strong>{{ $loop->iteration }}</strong>
+                                                </td>
+                                                <td class="text-center">
+                                                    {{ Carbon::parse($sp->tanggal)->locale('id')->translatedFormat('d F Y') }}
+                                                </td>
+                                                <td class="text-center">
+                                                    <span class="badge"
+                                                        style="background-color: {{ Carbon::parse($sp->tanggal)->addMonths(6)->isPast()? 'red': 'green' }} ;">{{ Carbon::parse($sp->tanggal)->addMonths(6)->isPast()? 'Kadaluarsa': 'Masih Berlaku' }}
+                                                    </span>
+                                                </td>
+                                                @if (session()->get('username') == 'ea')
+                                                    <td class="fw-semibold fs-sm text-center">
+                                                        @if (!Carbon::parse($sp->tanggal)->addMonths(6)->isPast())
+                                                            <button type="button" class="btn btn-sm btn-warning editSP"
+                                                                data-id="{{ $sp->id_sp }}"
+                                                                data-tanggal="{{ $sp->tanggal }}"><i
+                                                                    class="fa fa-fw fa-pencil-alt"></i></button>
+                                                            <a href="{{ route('sp.delete', ['id' => $sp->id_sp]) }}"
+                                                                class="btn btn-sm btn-danger"
+                                                                onclick="return confirm('Apakah Anda yakin ingin menghapus SP ini?')"><i
+                                                                    class="fa fa-fw fa-trash"></i></a>
+                                                        @endif
+                                                    </td>
+                                                @endif
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
             <!-- END Past Orders -->
+        </div>
+        <div class="content">
+            <!-- Recent Orders -->
+            <div class="row">
+                <div class="col-lg-12">
+                    <!-- Block Tabs Alternative Style -->
+
+                    <!-- END Block Tabs Alternative Style -->
+                </div>
+            </div>
+            <!-- END Recent Orders -->
         </div>
         <!-- END Page Content -->
     </main>
@@ -121,6 +202,47 @@
                                                 <option value="SD">Sakit (Surat Dokter)</option>
                                                 <option value="S">Sakit (Tanpa Surat Dokter)</option>
                                             </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="block-content block-content-full text-end bg-body">
+                            <button type="button" class="btn btn-sm btn-alt-secondary me-1"
+                                data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-sm btn-primary">Update Data</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="editSP" tabindex="-1" role="dialog" aria-labelledby="modal-block-vcenter"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-popin modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="block block-rounded block-transparent mb-0">
+                    <div class="block-header block-header-default">
+                        <h3 class="block-title">Edit Data SP</h3>
+                        <div class="block-options">
+                            <button type="button" class="btn-block-option" data-bs-dismiss="modal" aria-label="Close">
+                                <i class="fa fa-fw fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <form action="{{ route('sp.update') }}" method="post" enctype="multipart/form-data">
+                        @csrf
+                        <div class="block-content fs-sm">
+                            <div class="block-content block-content-full">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="mb-4">
+                                            <label class="form-label" for="example-file-input">Tanggal SP</label>
+                                            <input class="form-control" type="date" name="tanggal" id="tanggal"
+                                                placeholder="Tanggal" required>
+                                            <input class="form-control" type="hidden" name="id_sp" id="id_sp"
+                                                required>
                                         </div>
                                     </div>
                                 </div>
@@ -185,4 +307,24 @@
             });
         });
     </script>
+
+<script>
+    var editButtons = document.querySelectorAll(".editSP");
+    editButtons.forEach(function(editButton) {
+        editButton.addEventListener("click", function() {
+            var id = editButton.getAttribute("data-id");
+            var tanggal = editButton.getAttribute("data-tanggal");
+
+            var modal = document.getElementById("editSP");
+            var tanggalInput = modal.querySelector("#tanggal");
+            var idSPInput = modal.querySelector("#id_sp");
+
+            tanggalInput.value = tanggal;
+            idSPInput.value = id;
+
+            var editModal = new bootstrap.Modal(modal);
+            editModal.show();
+        });
+    });
+</script>
 @endsection

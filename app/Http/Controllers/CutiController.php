@@ -81,8 +81,6 @@ class CutiController extends Controller
             session()->flash('success', 'Berhasil Mengubah Cuti Karyawan');
             return redirect()->route('karyawan.detail', ['id' => $cuti->id_karyawan]);
         }
-
-
     }
 
     /**

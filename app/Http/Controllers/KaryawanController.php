@@ -7,6 +7,7 @@ use App\Models\Pengguna;
 use App\Models\Bagian;
 use App\Models\Divisi;
 use App\Models\Cuti;
+use App\Models\SP;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\KaryawanImport;
 use Illuminate\Http\Request;
@@ -95,7 +96,20 @@ class KaryawanController extends Controller
                 $karyawan->save();
             }
             session()->flash('success', 'Berhasil Menginput Cuti Karyawan');
-            return redirect()->route('karyawan');
+            return redirect()->route('karyawan.detail', ['id' => $request->id_karyawan]);
+        }
+    }
+
+    public function sp(Request $request)
+    {
+        $sp = new SP();
+        $sp->id_karyawan = $request->id_karyawan;
+        $sp->tanggal = $request->tanggal;
+        $save = $sp->save();
+
+        if ($save) {
+            session()->flash('success', 'Berhasil Menginput SP Karyawan');
+            return redirect()->route('karyawan.detail', ['id' => $request->id_karyawan]);
         }
     }
 
@@ -117,11 +131,13 @@ class KaryawanController extends Controller
     {
         $karyawan = Karyawan::where('id_karyawan',$id)->get();
         $cuti = Cuti::where('id_karyawan', $karyawan[0]->id_karyawan)->orderBy('tanggal', 'desc')->get();
+        $sp = SP::where('id_karyawan', $karyawan[0]->id_karyawan)->orderBy('tanggal', 'desc')->get();
 
         $data = [
             'title'    => "Detail Karyawan ".$karyawan[0]->nama_karyawan,
             'karyawan' => $karyawan,
             'cuti'     => $cuti,
+            'sp'       => $sp,
             'update' => Cuti::orderBy('updated_at', 'desc')->first()
         ];
 

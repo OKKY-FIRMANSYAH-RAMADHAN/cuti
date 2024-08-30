@@ -71,7 +71,11 @@
                                                     data-id="{{ $krywn->id_karyawan }}"
                                                     data-name="{{ $krywn->nama_karyawan }}"><i
                                                         class="fa fa-fw fa-calendar-plus"></i></button>
-                                                <button type="button" class="btn btn-sm btn-warning editButton"
+                                                <button type="button" class="btn btn-sm btn-warning spButton"
+                                                    data-id="{{ $krywn->id_karyawan }}"
+                                                    data-name="{{ $krywn->nama_karyawan }}"><i
+                                                        class="fa fa-fw fa-warning"></i></button>
+                                                <button type="button" class="btn btn-sm btn-secondary editButton"
                                                     data-id="{{ $krywn->id_karyawan }}"
                                                     data-name="{{ $krywn->nama_karyawan }}"
                                                     data-idbagian="{{ $krywn->id_bagian }}"
@@ -370,6 +374,54 @@
         </div>
     </div>
     {{-- End Modal Edit Sisa Cuti --}}
+
+    {{-- Modal Tambah SP --}}
+    <div class="modal" id="spModal" tabindex="-1" role="dialog" aria-labelledby="modal-block-vcenter"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-popin modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="block block-rounded block-transparent mb-0">
+                    <div class="block-header block-header-default">
+                        <h3 class="block-title">Tambah SP</h3>
+                        <div class="block-options">
+                            <button type="button" class="btn-block-option" data-bs-dismiss="modal" aria-label="Close">
+                                <i class="fa fa-fw fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <form action="{{ route('karyawan.sp') }}" method="post" enctype="multipart/form-data">
+                        @csrf
+                        <div class="block-content fs-sm">
+                            <div class="block-content block-content-full">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="mb-4">
+                                            <label class="form-label" for="example-file-input">Nama Karyawan</label>
+                                            <input class="form-control" type="text" name="nama_karyawan"
+                                                id="nama_karyawan" placeholder="Nama Karyawan" required disabled>
+                                            <input class="form-control" type="hidden" name="id_karyawan"
+                                                id="id_karyawan" placeholder="Id Karyawan" required>
+                                        </div>
+                                        <div class="mb-4">
+                                            <label class="form-label" for="example-file-input">Tanggal SP</label>
+                                            <input class="form-control" type="date" name="tanggal" id="tanggal"
+                                                placeholder="Tanggal" required>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="block-content block-content-full text-end bg-body">
+                            <button type="button" class="btn btn-sm btn-alt-secondary me-1"
+                                data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-sm btn-primary">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{-- End Modal Tambah SP --}}
 @endsection
 
 @section('javascript')
@@ -394,75 +446,85 @@
     <script src="{{ asset('assets/js/pages/be_tables_datatables.min.js') }}"></script>
 
     <script>
-        var editButtons = document.querySelectorAll(".editButton");
-        editButtons.forEach(function(editButton) {
-            editButton.addEventListener("click", function() {
-                var id = editButton.getAttribute("data-id");
-                var name = editButton.getAttribute("data-name");
-                var idbagian = editButton.getAttribute("data-idbagian");
-                var iddivisi = editButton.getAttribute("data-iddivisi");
+        function handleButtonClick(buttonClass, modalId, dataMapping) {
+            var buttons = document.querySelectorAll(buttonClass);
+            buttons.forEach(function(button) {
+                button.addEventListener("click", function() {
+                    var modal = document.getElementById(modalId);
 
-                var modal = document.getElementById("editModal");
-                var namaKaryawanInput = modal.querySelector("#nama_karyawan");
-                var idKaryawanInput = modal.querySelector("#id_karyawan");
+                    dataMapping.forEach(function(mapping) {
+                        var element = modal.querySelector(mapping.selector);
+                        var dataValue = button.getAttribute(mapping.dataAttr);
+                        element.value = dataValue;
+                    });
 
-                namaKaryawanInput.value = name;
-                idKaryawanInput.value = id;
-
-                // Temukan elemen select
-                var selectElement = document.getElementById('id_bagian_update');
-                var selectDivisi = document.getElementById('id_divisi_update');
-
-                for (var i = 0; i < selectElement.options.length; i++) {
-                    if (selectElement.options[i].value == idbagian) {
-                        selectElement.options[i].selected = true;
-                        break;
+                    if (dataMapping.some(m => m.type === 'select')) {
+                        dataMapping.filter(m => m.type === 'select').forEach(function(mapping) {
+                            var selectElement = modal.querySelector(mapping.selector);
+                            var dataValue = button.getAttribute(mapping.dataAttr);
+                            for (var i = 0; i < selectElement.options.length; i++) {
+                                if (selectElement.options[i].value == dataValue) {
+                                    selectElement.options[i].selected = true;
+                                    break;
+                                }
+                            }
+                        });
                     }
-                }
 
-                for (var i = 0; i < selectDivisi.options.length; i++) {
-                    if (selectDivisi.options[i].value == iddivisi) {
-                        selectDivisi.options[i].selected = true;
-                        break;
-                    }
-                }
+                    var bootstrapModal = new bootstrap.Modal(modal);
+                    bootstrapModal.show();
+                });
+            });
+        }
 
-                var editModal = new bootstrap.Modal(modal);
-                editModal.show();
-            });
-        });
-    </script>
-    <script>
-        var cutiButtons = document.querySelectorAll(".cutiButton");
-        cutiButtons.forEach(function(cutiButtons) {
-            cutiButtons.addEventListener("click", function() {
-                var id = cutiButtons.getAttribute("data-id");
-                var name = cutiButtons.getAttribute("data-name");
-                var modal = document.getElementById("cutiModal");
-                var namaKaryawan = modal.querySelector("#nama_karyawan");
-                var idKaryawan = modal.querySelector("#id_karyawan");
-                namaKaryawan.value = name;
-                idKaryawan.value = id;
-                var cutiModal = new bootstrap.Modal(modal);
-                cutiModal.show();
-            });
-        });
-    </script>
+        handleButtonClick(".editButton", "editModal", [{
+                selector: "#nama_karyawan",
+                dataAttr: "data-name"
+            },
+            {
+                selector: "#id_karyawan",
+                dataAttr: "data-id"
+            },
+            {
+                selector: "#id_bagian_update",
+                dataAttr: "data-idbagian",
+                type: 'select'
+            },
+            {
+                selector: "#id_divisi_update",
+                dataAttr: "data-iddivisi",
+                type: 'select'
+            }
+        ]);
 
-    <script>
-        var editCutiButton = document.querySelectorAll(".buttonEditCuti");
-        editCutiButton.forEach(function(editCutiButton) {
-            editCutiButton.addEventListener("click", function() {
-                var id = editCutiButton.getAttribute("data-id");
-                var name = editCutiButton.getAttribute("data-cuti");
-                var modal = document.getElementById("editCuti");
-                var sisaCuti = modal.querySelector("#sisa_cuti");
-                var idKaryawan = modal.querySelector("#id_karyawan");
-                sisaCuti.value = name;
-                idKaryawan.value = id;
-                var editCuti = new bootstrap.Modal(modal);
-                editCuti.show();
-            });
-        });
+        handleButtonClick(".cutiButton", "cutiModal", [{
+                selector: "#nama_karyawan",
+                dataAttr: "data-name"
+            },
+            {
+                selector: "#id_karyawan",
+                dataAttr: "data-id"
+            }
+        ]);
+
+        handleButtonClick(".buttonEditCuti", "editCuti", [{
+                selector: "#sisa_cuti",
+                dataAttr: "data-cuti"
+            },
+            {
+                selector: "#id_karyawan",
+                dataAttr: "data-id"
+            }
+        ]);
+
+        handleButtonClick(".spButton", "spModal", [{
+                selector: "#nama_karyawan",
+                dataAttr: "data-name"
+            },
+            {
+                selector: "#id_karyawan",
+                dataAttr: "data-id"
+            }
+        ]);
     </script>
 @endsection
