@@ -47,7 +47,7 @@
                                     <th>Bagian</th>
                                     <th>Divisi</th>
                                     <th class="text-center">Sisa Cuti</th>
-                                    <th class="text-center">Aksi</th>
+                                    <th class="text-center no-print">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody class="fs-sm">
