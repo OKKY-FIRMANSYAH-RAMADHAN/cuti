@@ -96,7 +96,7 @@ class KaryawanController extends Controller
                 $karyawan->save();
             }
             session()->flash('success', 'Berhasil Menginput Cuti Karyawan');
-            return redirect()->route('karyawan.detail', ['id' => $request->id_karyawan]);
+            return redirect()->route('karyawan');
         }
     }
 
@@ -109,7 +109,7 @@ class KaryawanController extends Controller
 
         if ($save) {
             session()->flash('success', 'Berhasil Menginput SP Karyawan');
-            return redirect()->route('karyawan.detail', ['id' => $request->id_karyawan]);
+            return redirect()->route('karyawan');
         }
     }
 
