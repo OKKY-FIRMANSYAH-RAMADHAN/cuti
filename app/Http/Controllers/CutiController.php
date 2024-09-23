@@ -15,7 +15,7 @@ class CutiController extends Controller
     {
         $data = [
             'title' => "Riwayat Tidak Masuk",
-            'riwayat' => Cuti::with('karyawan.bagian', 'karyawan.divisi')->orderBy('tanggal', 'desc')->get(),
+            'riwayat' => Cuti::with('karyawan.bagian', 'karyawan.divisi')->orderBy('created_at', 'desc')->get(),
             'update' => Cuti::orderBy('updated_at', 'desc')->first()
         ];
 

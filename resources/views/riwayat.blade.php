@@ -32,7 +32,7 @@
                 <div class="block-content block-content-full">
                     <!-- Recent Orders Table -->
                     <div class="table-responsive">
-                        <table class="table table-bordered table-striped table-vcenter js-dataTable-buttons">
+                        <table class="table table-bordered table-striped table-vcenter js-dataTable-riwayat">
                             <thead>
                                 <tr>
                                     <th class="text-center">No</th>

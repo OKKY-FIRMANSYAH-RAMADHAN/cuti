@@ -26,6 +26,8 @@
                         <button type="button" class="btn btn-sm btn-success push" data-bs-toggle="modal"
                             data-bs-target="#modal-block-import"> <i class="fa fa-upload opacity-50"></i> Import
                             Karyawan</button>
+                        <button type="button" class="btn btn-sm btn-primary push" data-bs-toggle="modal"
+                            data-bs-target="#modal-cuti-batch"> <i class="fa fa-plus opacity-50"></i> Cuti Batch</button>
                     </div>
                 @endif
             </div>
@@ -299,11 +301,6 @@
                                                 id="id_karyawan" placeholder="Id Karyawan" required>
                                         </div>
                                         <div class="mb-4">
-                                            <label class="form-label" for="example-file-input">Tanggal Cuti</label>
-                                            <input class="form-control" type="date" name="tanggal" id="tanggal"
-                                                placeholder="Tanggal" required>
-                                        </div>
-                                        <div class="mb-4">
                                             <label class="form-label" for="example-file-input">Alasan Cuti</label>
                                             <select class="form-select" id="keterangan" name="keterangan" required>
                                                 <option selected value="" disabled>Pilih Alasan</option>
@@ -315,6 +312,18 @@
                                                 <option value="SD">Sakit (Surat Dokter)</option>
                                                 <option value="S">Sakit (Tanpa Surat Dokter)</option>
                                             </select>
+                                        </div>
+                                        <div class="mb-4">
+                                            <label class="form-label">Tanggal Cuti</label>
+                                            <div id="tanggal-container">
+                                                <div class="mb-2">
+                                                    <input class="form-control" type="date" name="tanggal[]"
+                                                        placeholder="Tanggal Cuti 1" required>
+                                                </div>
+                                            </div>
+                                            <button type="button" id="add-date"
+                                                class="btn btn-sm btn-outline-secondary form-control">+ Tambah
+                                                Tanggal</button>
                                         </div>
                                     </div>
                                 </div>
@@ -422,6 +431,70 @@
         </div>
     </div>
     {{-- End Modal Tambah SP --}}
+
+    {{-- Modal Batch Cuti --}}
+    <div class="modal fade" id="modal-cuti-batch" tabindex="-1" role="dialog" aria-labelledby="modal-cuti-batch"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-popin modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="block block-rounded block-transparent mb-0">
+                    <div class="block-header block-header-default">
+                        <h3 class="block-title">Batch Cuti Per Divisi</h3>
+                        <div class="block-options">
+                            <button type="button" class="btn-block-option" data-bs-dismiss="modal" aria-label="Close">
+                                <i class="fa fa-fw fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <form action="{{ route('karyawan.batchcuti') }}" method="post" enctype="multipart/form-data">
+                        @csrf
+                        <div class="block-content fs-sm">
+                            <div class="block-content block-content-full">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="mb-4">
+                                            <label class="form-label" for="example-file-input">Divisi</label>
+                                            <select class="form-select" id="id_divisi" name="id_divisi" required>
+                                                <option selected value="" disabled>Pilih Divisi</option>
+                                                @foreach ($divisi as $dvs)
+                                                    <option value="{{ $dvs->id_divisi }}">{{ $dvs->nama_divisi }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="mb-4">
+                                            <label class="form-label" for="example-file-input">Tanggal Cuti</label>
+                                            <input class="form-control" type="date" name="tanggal" id="tanggal"
+                                                placeholder="Tanggal" required>
+                                        </div>
+                                        <div class="mb-4">
+                                            <label class="form-label" for="example-file-input">Alasan Cuti</label>
+                                            <select class="form-select" id="keterangan" name="keterangan" required>
+                                                <option selected value="" disabled>Pilih Alasan</option>
+                                                <option value="A">Alpa</option>
+                                                <option value="C">Cuti</option>
+                                                <option value="DIS">1/2 Hari</option>
+                                                <option value="DR">Di Rumahkan</option>
+                                                <option value="I">Izin</option>
+                                                <option value="SD">Sakit (Surat Dokter)</option>
+                                                <option value="S">Sakit (Tanpa Surat Dokter)</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="block-content block-content-full text-end bg-body">
+                            <button type="button" class="btn btn-sm btn-alt-secondary me-1"
+                                data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-sm btn-primary">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{-- End Modal Batch Cuti --}}
 @endsection
 
 @section('javascript')
@@ -446,6 +519,39 @@
     <script src="{{ asset('assets/js/pages/be_tables_datatables.min.js') }}"></script>
 
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            let dateCount = 1;
+
+            function addDateInput() {
+                dateCount++;
+                const container = document.getElementById('tanggal-container');
+                const newDateInput = document.createElement('div');
+                newDateInput.className = 'mb-2'; // Atur kelas sesuai kebutuhan
+                newDateInput.innerHTML = `
+            <div class="row">
+                <div class="col-10">
+                    <input class="form-control" type="date" name="tanggal[]"
+                    placeholder="Tanggal Cuti ${dateCount}" required>
+                </div>
+                <div class="col-2">
+                    <button type="button" class="btn remove-date">
+                        <i class="fa-solid fa-x"></i>
+                    </button>
+                </div>
+            </div>
+        `;
+                container.appendChild(newDateInput);
+            }
+
+            document.getElementById('add-date').addEventListener('click', addDateInput);
+
+            document.getElementById('tanggal-container').addEventListener('click', function(event) {
+                if (event.target.closest('.remove-date')) {
+                    event.target.closest('div.mb-2').remove();
+                }
+            });
+        });
+
         function handleButtonClick(buttonClass, modalId, dataMapping) {
             var buttons = document.querySelectorAll(buttonClass);
             buttons.forEach(function(button) {

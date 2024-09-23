@@ -83,21 +83,29 @@ class KaryawanController extends Controller
      */
     public function cuti(Request $request)
     {
-        $cuti = new Cuti();
-        $cuti->id_karyawan = $request->id_karyawan;
-        $cuti->tanggal = $request->tanggal;
-        $cuti->keterangan = $request->keterangan;
-        $save = $cuti->save();
+        $request->validate([
+            'id_karyawan' => 'required|exists:karyawan,id_karyawan',
+            'tanggal' => 'required|array',
+            'tanggal.*' => 'required|date',
+            'keterangan' => 'required|string',
+        ]);
 
-        if ($save) {
-            if ($request->keterangan === "C") {
-                $karyawan = Karyawan::find($request->id_karyawan);
-                $karyawan->sisa_cuti = $karyawan->sisa_cuti - 1;
-                $karyawan->save();
-            }
-            session()->flash('success', 'Berhasil Menginput Cuti Karyawan');
-            return redirect()->route('karyawan');
+        foreach ($request->tanggal as $tanggal) {
+            $cuti = new Cuti();
+            $cuti->id_karyawan = $request->id_karyawan;
+            $cuti->tanggal = $tanggal;
+            $cuti->keterangan = $request->keterangan;
+            $cuti->save();
         }
+
+        if ($request->keterangan === "C") {
+            $karyawan = Karyawan::find($request->id_karyawan);
+            $karyawan->sisa_cuti = $karyawan->sisa_cuti - count($request->tanggal);
+            $karyawan->save();
+        }
+
+        session()->flash('success', 'Berhasil Menginput Cuti Karyawan');
+        return redirect()->route('karyawan');
     }
 
     public function sp(Request $request)
@@ -111,6 +119,21 @@ class KaryawanController extends Controller
             session()->flash('success', 'Berhasil Menginput SP Karyawan');
             return redirect()->route('karyawan');
         }
+    }
+
+    public function batchcuti(Request $request)
+    {
+        $karyawan = Karyawan::where('id_divisi', $request->id_divisi)->get('id_karyawan');
+        foreach ($karyawan as $key => $value) {
+            $cuti = new Cuti();
+            $cuti->id_karyawan = $value->id_karyawan;
+            $cuti->tanggal = $request->tanggal;
+            $cuti->keterangan = $request->keterangan;
+            $cuti->save();
+        }
+
+        session()->flash('success', 'Berhasil Menginput Data Cuti');
+        return redirect()->route('karyawan');
     }
 
     public function setSisaCuti(Request $request) {
